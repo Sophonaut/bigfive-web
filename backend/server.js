@@ -22,6 +22,7 @@ const handler = routes.getRequestHandler(app)
 const port = parseInt(process.env.PORT, 10) || 3000
 const express = require('express')
 require('./models/User')
+require('./shared/passport')
 const userRoutes = require('./routes/users')
 const stripeRoutes = require('./routes/stripe')
 
@@ -66,17 +67,6 @@ i18n
           privateIpCountry: 'en'
         }))
 
-        // server.use(
-        //   session({
-        //     secret: config.JWT_SECRET,
-        //     resave: false,
-        //     saveUninitialized: true,
-        //     store: MongoStore.create({ mongoUrl: config.DB_CONNECTION })
-        //   })
-        // );
-        // server.use(passport.initialize());
-        // server.use(passport.session());
-
         server.get('../sitemap.xml', (req, res) => {
           const filePath = join(__dirname, 'static', 'sitemap.xml')
           return app.serveStatic(req, res, filePath)
@@ -86,10 +76,6 @@ i18n
           const filePath = join(__dirname, '.next', 'service-worker.js')
           return app.serveStatic(req, res, filePath)
         })
-
-        // POST api/users/login log a user in with a valid email and pass
-        // GET api/user verify a specific user is logged in
-        // PUT api/user update password and or email
 
         server.get('/api/get/:id', (req, res) => {
           const id = req.params && req.params.id ? req.params.id : false
@@ -118,16 +104,16 @@ i18n
         server.use('/api/', stripeRoutes)
 
         // generic error handling
-        server.use((err, req, res, next) => {
-          if (err.name === 'ValidationError') {
-            return res.status(422).json({
-              errors: Object.keys(err.errors).reduce(function (errors, key) {
-                errors[key] = err.errors[key].message
-                return errors
-              }, {})
-            })
-          }
-        })
+        // server.use((err, req, res, next) => {
+        //   if (err.name === 'ValidationError') {
+        //     return res.status(422).json({
+        //       errors: Object.keys(err.errors).reduce(function (errors, key) {
+        //         errors[key] = err.errors[key].message
+        //         return errors
+        //       }, {})
+        //     })
+        //   }
+        // })
 
         server.use(handler)
 

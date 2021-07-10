@@ -1,65 +1,80 @@
 import Link from './Link'
+import Router from 'next/router'
+import { authenticationService } from '../../lib/auth.service'
+
+const handleLogout = () => {
+  authenticationService.logout()
+  Router.push('/buy')
+}
 
 const Header = ({ user, info }) => (
-  <header>
-    <div className='nav-container'>
-      <div className='links-container'>
-        <Link route='/' activeClassName='active'><a>HOME</a></Link>
-        <Link route='/test' activeClassName='active'><a>TEST</a></Link>
-        <Link route='/result' activeClassName='active'><a>RESULT</a></Link>
-        <Link route='/compare' activeClassName='active'><a>COMPARE</a></Link>
-        <Link route='/about' activeClassName='active'><a>ABOUT</a></Link>
+  <>
+    <header>
+      <div className='nav-container'>
+        <div className='links-container'>
+          {user
+            ? <div>
+                <a href='https://sophonaut.com'>HOME</a>
+                <Link route='/test' activeClassName='active'><a>TEST</a></Link>
+                <Link route='/result' activeClassName='active'><a>RESULT</a></Link>
+                <Link route='/compare' activeClassName='active'><a>COMPARE</a></Link>
+              </div>
+            : <div>
+                <a href='https://sophonaut.com'>HOME</a>
+                <Link route='/buy' activeClassName='active'><a>PURCHASE</a></Link>
+              </div>}
+        </div>
+        <div className='nav-right'>
+          {user
+            ? <span onClick={handleLogout} activeClassName='active'><a>LOGOUT</a></span>
+            : <Link route='/signup' activeClassName='active'><a>LOGIN</a></Link>}
+        </div>
+        {info && <div className='nav-info'>{info}</div>}
       </div>
-      <div className='nav-right'>
-        {user
-          ? <span>logged in as <b>{user}</b></span>
-          : <Link route='/signup' activeClassName='active'><a>LOGIN</a></Link>}
-      </div>
-      {info && <div className='nav-info'>{info}</div>}
-    </div>
-    <style jsx>
-      {`
-        header {
-          grid-area: header;
-          justify-self: center;
-          background: white;
-          margin: auto;
-          padding: 25px;
-          max-width: 900px;
-        }
-        .nav-info {
-          position: absolute;
-          font-size: 12px;
-          left: 10%;
-        }
-        .links-container, .nav-container {
-          display: inline-block;
-        }
-        .nav-right {
-          right: 20px;
-          position: absolute;
-          display: inline-block;
-          font-size: 12px;
-        }
-        a {
-          color: #999;
-          padding: 10px;
-          font-size: 12px;
-        }
-        a:hover {
-          color: black;
-        }
-        .active {
-          color: black !important;
-        }
-        @media screen and (max-width: 800px) {
-          .nav-right {
-            display: none;
+      <style jsx>
+        {`
+          header {
+            grid-area: header;
+            justify-self: center;
+            background: white;
+            margin: auto;
+            padding: 25px;
+            max-width: 900px;
           }
-        }
-      `}
-    </style>
-  </header>
+          .nav-info {
+            position: absolute;
+            font-size: 12px;
+            left: 10%;
+          }
+          .links-container, .nav-container {
+            display: inline-block;
+          }
+          .nav-right {
+            right: 20px;
+            position: absolute;
+            display: inline-block;
+            font-size: 12px;
+          }
+          a {
+            color: #999;
+            padding: 10px;
+            font-size: 12px;
+          }
+          a:hover {
+            color: black;
+          }
+          .active {
+            color: black !important;
+          }
+          @media screen and (max-width: 800px) {
+            .nav-right {
+              display: none;
+            }
+          }
+        `}
+      </style>
+    </header>
+  </>
 )
 
 export default Header

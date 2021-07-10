@@ -1,8 +1,7 @@
 const routes = module.exports = require('next-routes')()
 
 routes
-  .add('index', '/')
-  .add('about')
+  .add('buy', '/')
   .add('test', '/test/:lang?')
   .add('result', '/result')
   .add('showResult', '/result/:id')

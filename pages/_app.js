@@ -3,10 +3,21 @@ import App from 'next/app'
 import React from 'react'
 import { Router } from '../routes'
 import * as gtag from '../lib/gtag'
+import { authenticationService } from '../lib/auth.service'
 
 Router.onRouteChangeComplete = url => gtag.pageview(url)
 
 export default class MyApp extends App {
+  constructor (props) {
+    super(props)
+    this.state = { currentUser: 'test' }
+    authenticationService.currentUser.subscribe(user => this.setState({ currentUser: user }))
+  }
+
+  componentDidMount () {
+    // authenticationService.currentUser.subscribe(user => this.setState({ currentUser: user }))
+  }
+
   static async getInitialProps ({ Component, router, ctx, ctx: { query, req } }) {
     let componentProps = {}
     const path = req && req.url ? req.url : false
@@ -21,8 +32,9 @@ export default class MyApp extends App {
 
   render () {
     const { Component, pageProps } = this.props
+    const { currentUser } = this.state
     return (
-      <Layout>
+      <Layout user={currentUser}>
         <Component {...pageProps} />
       </Layout>
     )

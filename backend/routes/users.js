@@ -3,14 +3,23 @@ const router = require('express').Router()
 const passport = require('passport')
 const User = model('User')
 const auth = require('./auth')
+const { getStripeSession } = require('./stripe')
 
 // POST api/users registers users
-router.post('/users', (req, res, next) => {
+router.post('/users', async (req, res, next) => {
   var user = new User()
 
-  user.paid = true
+  const sessionId = req.query.sessionId
+  const session = await getStripeSession(sessionId)
+
+  user.paid = session.payment_status === 'paid'
+
   user.email = req.body.user.email
   user.setPassword(req.body.user.password)
+
+  if (!user.paid) {
+    res.status(403).json({ errors: { message: 'something went wrong with the payment, try again.' } })
+  }
 
   user.save()
     .then(user => {
@@ -35,7 +44,7 @@ router.post('/users/login', (req, res, next) => {
 
     if (user) {
       user.token = user.generateJWT()
-      return res.json({ user: user.toAuthJSON() })
+      return res.json({ user: user.toAuthJSON(user) })
     } else {
       return res.status(422).json(info)
     }

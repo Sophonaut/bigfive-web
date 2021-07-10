@@ -1,12 +1,7 @@
 const router = require('express').Router()
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2020-08-27',
-  appInfo: { // For sample support and debugging, not required for production:
-    name: 'Sophonaut/bigfive-web',
-    version: '0.0.1',
-    url: 'https://github.com/Sophonaut/bigfive-web'
-  }
+  apiVersion: '2020-08-27'
 })
 
 router.get('/config', async (req, res) => {
@@ -95,4 +90,15 @@ router.post('/webhook', async (req, res) => {
   }
 })
 
+router.post('/checkout-session', async (req, res) => {
+  const { sessionId } = req.query
+  const session = await stripe.checkout.sessions.retrieve(sessionId)
+  res.send(session)
+})
+
 module.exports = router
+
+// gets a checkout session by id.
+module.exports.getStripeSession = async sessionId => {
+  return await stripe.checkout.sessions.retrieve(sessionId)
+}

@@ -41,10 +41,6 @@ UserSchema.methods.toAuthJSON = (user) => {
   }
 }
 
-UserSchema.methods.setPaid = paid => {
-  this.paid = paid
-}
-
 UserSchema.plugin(uniqueValidator, { message: 'is already taken.' })
 
 module.exports = model('User', UserSchema)
