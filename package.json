@@ -32,7 +32,7 @@
     "standard-fix": "standard --fix",
     "dev": "node backend/server.js",
     "build": "next build",
-    "start": "NODE_ENV=production node server.js",
+    "start": "NODE_ENV=production node .g/backend/server.js",
     "cleanup": "rm -rf .next",
     "refresh": "rm -rf node_modules && rm package-lock.json && npm install",
     "deploy": "now && now alias"
