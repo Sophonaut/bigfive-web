@@ -14,14 +14,14 @@ const Header = ({ user, info }) => (
         <div className='links-container'>
           {user
             ? <div>
-                <a href='https://sophonaut.com'>HOME</a>
-                <Link route='/test' activeClassName='active'><a>TEST</a></Link>
-                <Link route='/result' activeClassName='active'><a>RESULT</a></Link>
-                <Link route='/compare' activeClassName='active'><a>COMPARE</a></Link>
+              <a href='https://sophonaut.com'>HOME</a>
+              <Link route='/test' activeClassName='active'><a>TEST</a></Link>
+              <Link route='/result' activeClassName='active'><a>RESULT</a></Link>
+              <Link route='/compare' activeClassName='active'><a>COMPARE</a></Link>
               </div>
             : <div>
-                <a href='https://sophonaut.com'>HOME</a>
-                <Link route='/buy' activeClassName='active'><a>PURCHASE</a></Link>
+              <a href='https://sophonaut.com'>HOME</a>
+              <Link route='/buy' activeClassName='active'><a>PURCHASE</a></Link>
               </div>}
         </div>
         <div className='nav-right'>

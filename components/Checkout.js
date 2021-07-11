@@ -118,15 +118,15 @@ const Checkout = () => {
   }
 
   const buttonText = () => {
-    return(state.loading || !state.price
-    ? 'Loading...'
-    : `Buy for ${state.price}`)
+    return (state.loading || !state.price
+      ? 'Loading...'
+      : `Buy for ${state.price}`)
   }
 
   return (
     <div>
-      <div className="card">
-        <section >
+      <div className='card'>
+        <section>
           <div>
             <h1>YOUniverse</h1>
             <h4>Purchase a pass to take the Big Five Personality test, the most rigorous personality test there is!</h4>

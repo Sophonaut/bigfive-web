@@ -64,10 +64,9 @@ const users = [
 
 const Users = ({ users }) => (
   <div className='about'>
-    { users.map(user => (
+    {users.map(user => (
       <div key={user.nick.name} className='info'>
-        <div>
-        </div>
+        <div />
         <div className='text'>
           <div className='name'>
             {user.name}
@@ -123,7 +122,7 @@ export default () => {
   const dev = users.filter(user => user.dev)
   const trans = users.filter(user => !user.dev)
   return (
-    <Fragment>
+    <>
       <h2>Founders of Sophonaut</h2>
       <Users users={sopho} />
       <h2>Previous Developers</h2>
@@ -133,6 +132,6 @@ export default () => {
       <Users users={dev} />
       <h2>Translators</h2>
       <Users users={trans} />
-    </Fragment>
+    </>
   )
 }
