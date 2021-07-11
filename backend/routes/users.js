@@ -7,7 +7,7 @@ const { getStripeSession } = require('./stripe')
 
 // POST api/users registers users
 router.post('/users', async (req, res, next) => {
-  var user = new User()
+  const user = new User()
 
   const sessionId = req.query.sessionId
   const session = await getStripeSession(sessionId)

@@ -30,11 +30,9 @@ export default class extends Component {
         <ShortcutH1 name={data.title} />
         <p><em>{data.shortDescription}</em></p>
         <p>Score: {data.score}/120 - {data.scoreText} with and average score for {data.title} of {data.average}</p>
-        {data.percentile.length > 1 ?
-          <p>You are in the {data.percentile[0]}th percentile</p>
-          :
-          <p>You are between the {data.percentile[0]} and {data.percentile[1]} percentile</p>
-        }
+        {data.percentile.length > 1
+          ? <p>You are in the {data.percentile[0]}th percentile</p>
+          : <p>You are between the {data.percentile[0]} and {data.percentile[1]} percentile</p>}
         <p><strong>{data.text}</strong></p>
         <p>
           {

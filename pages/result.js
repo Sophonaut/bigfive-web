@@ -46,7 +46,7 @@ export default class extends Component {
         {
           resultId &&
             <p>
-            Your last test ID: <Code>{resultId}</Code>
+              Your last test ID: <Code>{resultId}</Code>
               <a title='Delete' onClick={() => { clearItems(); window.location.reload(true) }}>
                 <MdDelete style={{ cursor: 'pointer', marginRight: '10px' }} />
               </a>
