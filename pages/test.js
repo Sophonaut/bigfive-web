@@ -139,9 +139,6 @@ export default class extends Component {
       <div style={{ textAlign: 'left' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <LanguageBar switchLanguage={switchLanguage} selectedLanguage={lang} />
-          <div style={{ textAlign: 'right', fontSize: '12px' }}>
-            <Timer start={now} />
-          </div>
         </div>
         <ProgressBar progress={progress} />
         {

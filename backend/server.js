@@ -77,6 +77,8 @@ i18n
           return app.serveStatic(req, res, filePath)
         })
 
+        server.post('/locales/add/:lng/:ns', i18nextMiddleware.missingKeyHandler(i18n))
+
         server.get('/api/get/:id', (req, res) => {
           const id = req.params && req.params.id ? req.params.id : false
           if (!id || !validMongoId(id)) throw new Error('Not a valid id')
@@ -85,8 +87,6 @@ i18n
             res.send(data)
           })
         })
-
-        server.post('/locales/add/:lng/:ns', i18nextMiddleware.missingKeyHandler(i18n))
 
         server.post('/api/save', (req, res) => {
           const payload = req.body
@@ -102,18 +102,6 @@ i18n
 
         // api/stripe routes mounted
         server.use('/api/', stripeRoutes)
-
-        // generic error handling
-        // server.use((err, req, res, next) => {
-        //   if (err.name === 'ValidationError') {
-        //     return res.status(422).json({
-        //       errors: Object.keys(err.errors).reduce(function (errors, key) {
-        //         errors[key] = err.errors[key].message
-        //         return errors
-        //       }, {})
-        //     })
-        //   }
-        // })
 
         server.use(handler)
 
