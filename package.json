@@ -22,7 +22,7 @@
   ],
   "main": "server.js",
   "engines": {
-    "node": ">=12.16.1"
+    "node": ">=14"
   },
   "scripts": {
     "test": "standard && ava",
@@ -49,12 +49,12 @@
   "dependencies": {
     "@alheimsins/b5-johnson-120-ipip-neo-pi-r": "Sophonaut/b5-johnson-120-ipip-neo-pi-r#main",
     "@alheimsins/react-google-charts": "1.6.5",
-    "@sophonaut/b5-result-text": "github:Sophonaut/b5-result-text#main",
+    "@sophonaut/b5-result-text": "Sophonaut/b5-result-text",
     "@stripe/stripe-js": "^1.15.0",
     "axios": "^0.21.1",
-    "b5-calculate-score": "1.0.4",
     "babel-eslint": "10.1.0",
     "bcrypt": "^5.0.1",
+    "bigfive-calculate-score": "Sophonaut/bigfive-calculate-score",
     "chart.js": "^2.9.4",
     "connect-mongo": "^4.4.1",
     "cors": "^2.8.5",

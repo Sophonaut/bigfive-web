@@ -1,5 +1,5 @@
 import { Component } from 'react'
-import calculateScore from 'b5-calculate-score'
+import calculateScore from 'bigfive-calculate-score'
 import getResult from '@sophonaut/b5-result-text'
 import axios from 'axios'
 import { Code } from '../components/alheimsins'
