@@ -10,12 +10,11 @@ Router.onRouteChangeComplete = url => gtag.pageview(url)
 export default class MyApp extends App {
   constructor (props) {
     super(props)
-    this.state = { currentUser: 'test' }
-    authenticationService.currentUser.subscribe(user => this.setState({ currentUser: user }))
+    this.state = { currentUser: authenticationService.currentUserValue }
   }
 
   componentDidMount () {
-    // authenticationService.currentUser.subscribe(user => this.setState({ currentUser: user }))
+    authenticationService.currentUser.subscribe(user => this.setState({ currentUser: user }))
   }
 
   static async getInitialProps ({ Component, router, ctx, ctx: { query, req } }) {

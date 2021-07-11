@@ -26,7 +26,7 @@ const Header = ({ user, info }) => (
         </div>
         <div className='nav-right'>
           {user
-            ? <span onClick={handleLogout} activeClassName='active'><a>LOGOUT</a></span>
+            ? <span onClick={handleLogout} className='active'><a>LOGOUT</a></span>
             : <Link route='/signup' activeClassName='active'><a>LOGIN</a></Link>}
         </div>
         {info && <div className='nav-info'>{info}</div>}
