@@ -1,7 +1,7 @@
 import { Component } from 'react'
 import { Router } from '../routes'
 import LanguageBar from '../components/LanguageBar'
-import { Button, ProgressBar, RadioGroup, Radio, Timer } from '../components/alheimsins'
+import { Button, ProgressBar, RadioGroup, Radio } from '../components/alheimsins'
 import getConfig from 'next/config'
 import axios from 'axios'
 import { FaInfoCircle } from 'react-icons/fa'

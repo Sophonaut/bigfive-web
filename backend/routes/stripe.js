@@ -10,7 +10,8 @@ router.get('/config', async (req, res) => {
   res.send({
     publicKey: process.env.STRIPE_PUBLISHABLE_KEY,
     unitAmount: price.unit_amount,
-    currency: price.currency
+    currency: price.currency,
+    allow_promotion_codes:true
   })
 })
 

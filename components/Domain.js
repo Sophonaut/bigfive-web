@@ -23,13 +23,17 @@ export default class extends Component {
     this.setState({ [name]: action })
   }
 
+  cleanUpAverage(average) {
+    return Number(average.toPrecision(3))
+  }
+
   render () {
     const { data, chartWidth } = this.props
     return (
       <div className='domain-wrapper'>
         <ShortcutH1 name={data.title} />
         <p><em>{data.shortDescription}</em></p>
-        <p>Score: {data.score}/120 - {data.scoreText} with and average score for {data.title} of {data.average}</p>
+        <p>Score: {data.score}/120 - {data.scoreText} with and average score for {data.title} of {this.cleanUpAverage(data.average)}</p>
         <p>You are express {data.title} more than {data.percentile[0]} percent of the population</p>
         <p><strong>{data.text}</strong></p>
         <p>
