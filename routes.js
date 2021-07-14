@@ -4,6 +4,7 @@ routes
   .add({ name: 'default', pattern: '/', page: 'buy' })
   .add('buy', '/buy')
   .add('about', '/about')
+  .add('index', '/test-prep')
   .add('test', '/test/:lang?')
   .add('result', '/result')
   .add('showResult', '/result/:id')

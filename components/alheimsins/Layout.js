@@ -17,7 +17,7 @@ const Layout = ({ user, children, t }) => (
       <meta name='twitter:title' content='Find out who you are!' />
       <meta name='twitter:description' content='Get to know yourself better from a detailed profile of your personality traits or learn to know others by comparing yourself with your partner, colleagues, friends or family.' />
       <meta name='twitter:image' content='' />
-      <meta name='description' content='Take a free, open-source Big Five personality test - translated to multiple languages. Get to know yourself better from a detailed profile of your personality traits or learn to know others by comparing yourself with your partner, colleagues, friends or family.' />
+      <meta name='description' content='Take a comprehensive personality test - translated to multiple languages. Get to know yourself better from a detailed profile of your personality traits or learn to know others by comparing yourself with your partner, colleagues, friends or family.' />
       <meta name='keywords' content='YOUniverse, personality traits, survey, compare' />
       <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: '{ "@context": "http://schema.org/", "@type": "WebSite", "name": "YOUniverse Test", "url": "https://sophonaut.com" }' }} />
       <link rel='icon' sizes='192x192' href='/static/android-icon-192x192.png' />

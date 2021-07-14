@@ -33,7 +33,7 @@ const SignUp = () => {
       .then(res => {
         console.log(res)
         authenticationService.login(res.data.user)
-        Router.pushRoute('/test/en')
+        Router.pushRoute('/test-prep')
       })
       .catch(err => {
         console.log(err)

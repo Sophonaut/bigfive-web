@@ -23,7 +23,7 @@ export default class extends Component {
     this.setState({ [name]: action })
   }
 
-  cleanUpAverage(average) {
+  cleanUpAverage (average) {
     return Number(average.toPrecision(3))
   }
 

@@ -77,7 +77,7 @@ i18n
           return app.serveStatic(req, res, filePath)
         })
 
-        server.post('/locales/add/:lng/:ns', i18nextMiddleware.missingKeyHandler(i18n))
+        server.post('../locales/add/:lng/:ns', i18nextMiddleware.missingKeyHandler(i18n))
 
         server.get('/api/get/:id', (req, res) => {
           const id = req.params && req.params.id ? req.params.id : false

@@ -10,8 +10,7 @@ router.get('/config', async (req, res) => {
   res.send({
     publicKey: process.env.STRIPE_PUBLISHABLE_KEY,
     unitAmount: price.unit_amount,
-    currency: price.currency,
-    allow_promotion_codes:true
+    currency: price.currency
   })
 })
 
@@ -35,6 +34,7 @@ router.post('/create-checkout-session', async (req, res) => {
     payment_method_types: pmTypes,
     mode: 'payment',
     locale: locale,
+    allow_promotion_codes: true,
     line_items: [
       {
         price: process.env.PRICE,

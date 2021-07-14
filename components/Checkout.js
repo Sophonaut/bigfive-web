@@ -157,7 +157,7 @@ const Checkout = () => {
         section {
           display:flex;
           flex-direction: column;
-          width:50%;
+          width:100%;
           border: 2px solid black;
         }
           `}

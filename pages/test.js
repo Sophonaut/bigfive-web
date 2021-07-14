@@ -132,7 +132,7 @@ export default class extends Component {
   }
 
   render () {
-    const { items, progress, answers, next, previous, lang, now, restore } = this.state
+    const { items, progress, answers, next, previous, lang, restore } = this.state
     const done = progress === 100 && next
     const { handleChange, handleSubmit, handleBack, switchLanguage } = this
     return (
