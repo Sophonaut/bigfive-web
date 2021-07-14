@@ -20,7 +20,7 @@ const Home = ({ countryCode, t }) => {
   return (
     <div>
       <div style={{ paddingBottom: '20px', borderBottom: '1px solid rgb(234, 234, 234)' }}>
-        <h1>{t('home:title')}</h1>
+        <h1>YOUniverse: Big Five Personality Quiz</h1>
       </div>
       <div style={{ textAlign: 'left', margin: 'auto', fontSize: '14px', width: '100%' }}>
         <form onSubmit={startTest}>
@@ -49,7 +49,7 @@ const Home = ({ countryCode, t }) => {
             <Select name='languages' defaultValue={defaultLanguage} options={languageList} />
           </Field>
           <div style={{ textAlign: 'center', paddingTop: '20px' }}>
-            <Button value={t('home:paragraphs:start_test')} type='submit' background='rgb(255, 0, 128)' border='1px solid rgb(255, 0, 128)' />
+            <Button value={Start Test} type='submit' background='rgb(255, 0, 128)' border='1px solid rgb(255, 0, 128)' />
           </div>
         </form>
       </div>
