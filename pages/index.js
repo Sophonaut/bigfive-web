@@ -49,7 +49,7 @@ const Home = ({ countryCode, t }) => {
             <Select name='languages' defaultValue={defaultLanguage} options={languageList} />
           </Field>
           <div style={{ textAlign: 'center', paddingTop: '20px' }}>
-            <Button value={Start Test} type='submit' background='rgb(255, 0, 128)' border='1px solid rgb(255, 0, 128)' />
+            <Button value='Start Test' type='submit' background='rgb(255, 0, 128)' border='1px solid rgb(255, 0, 128)' />
           </div>
         </form>
       </div>

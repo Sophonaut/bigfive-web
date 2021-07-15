@@ -1,4 +1,3 @@
-import { Fragment } from 'react'
 const sopho = [
   {
     avatar: '/static/zrrrzzt.png',
