@@ -8,7 +8,8 @@ const UserSchema = new Schema({
   email: { type: String, lowercase: true, required: [true, "can't be blank"], match: [/\S+@\S+\.\S+/, 'is invalid'], index: true, unique: true },
   paid: { type: Boolean, required: false },
   salt: { type: String, required: true },
-  hash: { type: String, required: true }
+  hash: { type: String, required: true },
+  results: { type: Object, required: false }
 }, { timestamps: true })
 
 UserSchema.methods.validPassword = function (password) {
@@ -40,6 +41,8 @@ UserSchema.methods.toAuthJSON = (user) => {
     token: user.generateJWT()
   }
 }
+
+// UserSchema.methods.updateResults = function (results) {}
 
 UserSchema.plugin(uniqueValidator, { message: 'is already taken.' })
 

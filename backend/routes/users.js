@@ -61,7 +61,9 @@ router.get('/user', auth.required, (req, res, next) => {
 })
 
 // PUT api/user update password and or email
-// TODO refactor
+/* TODO refactor
+   Does it also make sense to make PUT user update the user model to add the results?
+*/
 router.put('/user', auth.required, (req, res, next) => {
   User.findById(req.payload.id).then((user) => {
     if (!user) { return res.sendStatus(401) }

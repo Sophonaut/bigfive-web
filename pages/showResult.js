@@ -9,6 +9,8 @@ import Domain from '../components/Domain'
 import SocialShare from '../components/SocialShare'
 import validMongoId from '../lib/valid-mongoid'
 import formatId from '../lib/format-id'
+import { getItem } from '../lib/localStorageStore'
+
 const { publicRuntimeConfig: { URL } } = getConfig()
 
 const httpInstance = axios.create({
@@ -47,6 +49,8 @@ export default class ShowResult extends Component {
       const results = await getResultFromId(query.id)
       return { results }
     }
+    const userSessionKey = getItem('currentUser')
+    console.log(`${userSessionKey ? 'does exist and is ' + userSessionKey : 'does not exist / null'}`)
     return {}
   }
 

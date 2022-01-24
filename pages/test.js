@@ -121,6 +121,11 @@ export default class extends Component {
         timeElapsed: Math.round((Date.now() - this.state.now) / 1000),
         dateStamp: Date.now()
       }
+      /*
+        At some point in here we need to update the user with the result hash -- how do we handle this?
+        If we're using embedded documents, we can use this space to update user by pushing the results directly to user
+        We can also still send the results to the database for posterity, but I'm not sure if this makes sense to do
+      */
       const { data } = await http.post('/api/save', result)
       setItem('result', data._id)
       Router.pushRoute('showResult', { id: data._id })
