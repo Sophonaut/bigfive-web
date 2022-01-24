@@ -1,7 +1,7 @@
 import { Chart } from 'react-google-charts'
 import { Loading } from './alheimsins'
 
-export default ({ title, data, header, vAxis, chartWidth }) => (
+const SummaryCompare = ({ title, data, header, vAxis, chartWidth }) =>
   <Chart
     chartType='ColumnChart'
     style={{ width: '90vw' }}
@@ -13,4 +13,5 @@ export default ({ title, data, header, vAxis, chartWidth }) => (
     legend_toggle
     loader={<Loading />}
   />
-)
+
+export default SummaryCompare
