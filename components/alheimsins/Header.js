@@ -31,7 +31,11 @@ const Header = ({ user, info }) => (
         <div className='nav-right'>
           {user
             ? <span onClick={handleLogout} className='active'><a>LOGOUT</a></span>
-            : <Link route='/signup' activeClassName='active'><a>LOGIN</a></Link>}
+            : (
+              <div>
+                <Link route='/signup' activeClassName='active'><a>LOGIN</a></Link>
+              </div>
+            )}
         </div>
         {info && <div className='nav-info'>{info}</div>}
       </div>

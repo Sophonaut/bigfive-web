@@ -5,7 +5,7 @@ import { Button, ProgressBar, RadioGroup, Radio } from '../components/alheimsins
 import getConfig from 'next/config'
 import axios from 'axios'
 import { FaInfoCircle } from 'react-icons/fa'
-import { populateData, restoreData, getProgress, clearItems, setItem } from '../lib/localStorageStore'
+import { populateData, restoreData, getProgress, clearItems, setItem, getItem } from '../lib/localStorageStore'
 
 const { publicRuntimeConfig } = getConfig()
 const http = axios.create({
@@ -103,7 +103,7 @@ export default class extends Component {
     window.scrollTo(0, 0)
     const { items, finished, position } = getItems(this.state.position, this.state.itemsPerPage, this.state.inventory).next()
     if (finished) {
-      clearItems()
+      // clearItems()
       const answers = this.state.answers
       const choices = Object.keys(answers).reduce((prev, current) => {
         const choice = answers[current]
@@ -122,11 +122,17 @@ export default class extends Component {
         dateStamp: Date.now()
       }
       /*
-        At some point in here we need to update the user with the result hash -- how do we handle this?
-        If we're using embedded documents, we can use this space to update user by pushing the results directly to user
-        We can also still send the results to the database for posterity, but I'm not sure if this makes sense to do
+        I needed to structure the params into a higher class object because I was having issues
+        with passing multiple params into http.post so I'm destructuring them on the server side.
       */
-      const { data } = await http.post('/api/save', result)
+      const user = {
+        email: JSON.parse(getItem('currentUser')).email
+      }
+      const params = {
+        result: result,
+        user: user
+      }
+      const { data } = await http.post('/api/save', params)
       setItem('result', data._id)
       Router.pushRoute('showResult', { id: data._id })
     } else {

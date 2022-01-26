@@ -9,7 +9,7 @@ const UserSchema = new Schema({
   paid: { type: Boolean, required: false },
   salt: { type: String, required: true },
   hash: { type: String, required: true },
-  results: { type: Object, required: false }
+  result: { type: Object, required: false }
 }, { timestamps: true })
 
 UserSchema.methods.validPassword = function (password) {
