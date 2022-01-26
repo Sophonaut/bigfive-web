@@ -102,8 +102,8 @@ i18n
         server.post('/api/save', (req, res) => {
           console.log(req.body)
           if (req.body.user.email) {
-            const user = User.findOne({ email: req.body.user.email }, (error, data) => {
-              if (error) { throw error }
+            const user = User.findOne({ email: req.body.user.email }, (err) => {
+              if (err) { throw err }
               if (!user) { return res.sendStatus(401) }
             }).then((user) => {
               user.result = req.body.result
