@@ -126,15 +126,14 @@ export default class extends Component {
         with passing multiple params into http.post so I'm destructuring them on the server side.
       */
       const user = {
-        email: JSON.parse(getItem('currentUser')).email
+        token: JSON.parse(getItem('currentUser')).token
       }
       const params = {
         result: result,
         user: user
       }
-      const { data } = await http.post('/api/save', params)
-      setItem('result', data._id)
-      Router.pushRoute('showResult', { id: data._id })
+      await http.post('/api/save', params)
+      Router.pushRoute('showResult')
     } else {
       const next = items.filter(item => !this.state.answers[item.id]).length === 0
       this.setState({ items, position, next, previous: true, restore: false })

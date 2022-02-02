@@ -9,7 +9,7 @@ const UserSchema = new Schema({
   paid: { type: Boolean, required: false },
   salt: { type: String, required: true },
   hash: { type: String, required: true },
-  result: { type: Object, required: false }
+  results: { type: Array, required: false }
 }, { timestamps: true })
 
 UserSchema.methods.validPassword = function (password) {
@@ -35,7 +35,6 @@ UserSchema.methods.generateJWT = function () {
 }
 
 UserSchema.methods.toAuthJSON = (user) => {
-  console.log('here')
   return {
     email: user.email,
     token: user.generateJWT()

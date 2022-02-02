@@ -100,13 +100,16 @@ i18n
           this into the User collection without explicitly requiring the mongoose model after mongoose setup, right?
         */
         server.post('/api/save', (req, res) => {
-          console.log(req.body)
-          if (req.body.user.email) {
-            const user = User.findOne({ email: req.body.user.email }, (err) => {
+          const token = req.body.user && req.body.user.token ? req.body.user.token.split('.') : false
+          if (!token) throw new Error('Not a valid query')
+          const userId = JSON.parse(Buffer.from(token[1], 'base64').toString('ascii')).id
+
+          if (userId) {
+            const user = User.findOne({ _id: mongo.ObjectId(userId) }, (err) => {
               if (err) { throw err }
               if (!user) { return res.sendStatus(401) }
             }).then((user) => {
-              user.result = req.body.result
+              user.results.push(req.body.result)
               user.save((err) => {
                 if (err) throw err
               })
