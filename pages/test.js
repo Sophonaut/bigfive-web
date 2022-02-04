@@ -99,6 +99,10 @@ export default class extends Component {
     this.setState({ items, position, next: true, previous })
   }
 
+  async submitResults (params) {
+    await http.post('/api/save', params)
+  }
+
   async handleSubmit () {
     window.scrollTo(0, 0)
     const { items, finished, position } = getItems(this.state.position, this.state.itemsPerPage, this.state.inventory).next()
@@ -132,8 +136,8 @@ export default class extends Component {
         result: result,
         user: user
       }
-      await http.post('/api/save', params)
-      Router.pushRoute('showResult')
+      this.submitResults(params)
+        .then(Router.pushRoute('showResult'))
     } else {
       const next = items.filter(item => !this.state.answers[item.id]).length === 0
       this.setState({ items, position, next, previous: true, restore: false })
