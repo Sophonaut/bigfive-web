@@ -2,6 +2,15 @@
 import { Radar } from 'react-chartjs-2'
 
 const SummaryCompare = ({ title, data, header, vAxis, chartWidth }) => {
+  /*
+    The way that data is flowing into SummaryCompare differs pretty starkly different
+    from the way that RadarChart handles data; we're splitting the data into arrays of
+    ["label", user_1_data, user_2_data] rather than datasets with facets, counts, scores
+    and additional metadata. This additional processing helps to unpack and format the
+    compared user scores in the same way that RadarChart expects them, but skips passing
+    them through RadarChart which adds some code reuse.
+  */
+
   const options = {
     legend: {
       position: 'top',
@@ -28,6 +37,9 @@ const SummaryCompare = ({ title, data, header, vAxis, chartWidth }) => {
     }
   }
 
+  /*
+
+  */
   const labels = data.map(array => array[0])
 
   /*
