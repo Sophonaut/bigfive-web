@@ -2,7 +2,10 @@ import { Radar } from 'react-chartjs-2'
 
 const options = {
   legend: {
-    position: 'top'
+    position: 'top',
+    labels: {
+      fontSize: 14
+    }
   },
   title: {
     display: true,
@@ -12,6 +15,9 @@ const options = {
     reverse: false,
     gridLines: {
       circular: true
+    },
+    pointLabels: {
+      fontSize: 14
     },
     ticks: {
       beginAtZero: true,

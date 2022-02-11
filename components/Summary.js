@@ -46,6 +46,8 @@ const ColumnChart = ({ title, data, vAxis, chartWidth }) => (
 )
 
 const renderCharts = (chartType, props) => {
+  console.log('triggered renderCharts')
+  console.log('props: ' + JSON.stringify(props))
   switch (chartType) {
     case 'ColumnChart': return <ColumnChart {...props} />
     case 'RadarChart': return <RadarChart {...props} />
