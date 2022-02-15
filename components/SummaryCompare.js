@@ -1,4 +1,3 @@
-// import RadarChart from './RadarChart'
 import { Radar } from 'react-chartjs-2'
 
 const SummaryCompare = ({ title, data, header, vAxis, chartWidth }) => {
@@ -37,9 +36,6 @@ const SummaryCompare = ({ title, data, header, vAxis, chartWidth }) => {
     }
   }
 
-  /*
-
-  */
   const labels = data.map(array => array[0])
 
   /*
@@ -72,25 +68,6 @@ const SummaryCompare = ({ title, data, header, vAxis, chartWidth }) => {
 
   return (
     <>
-      {/* {console.log(`
-      title: ${title}
-      data: ${JSON.stringify(data)}
-      header: ${JSON.stringify(header)}
-      vAxis: ${JSON.stringify(vAxis)}
-      chartWidth: ${chartWidth}
-      `)}
-      <Chart
-        chartType='ColumnChart'
-        style={{ width: '90vw' }}
-        data={[['domain', ...header], ...data]}
-        options={{ vAxis }}
-        width={chartWidth}
-        height='500px'
-        graph_id={title}
-        legend_toggle
-        loader={<Loading />}
-      /> */}
-
       <div>
         <Radar
           width={15}
