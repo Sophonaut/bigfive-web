@@ -30,7 +30,12 @@ const Header = ({ user, info }) => (
         </div>
         <div className='nav-right'>
           {user
-            ? <span onClick={handleLogout} className='active'><a>LOGOUT</a></span>
+            ? (
+              <div>
+                <Link route='/profile' activeClassName='active'><a>PROFILE</a></Link>
+                <span onClick={handleLogout} className='active'><a>LOGOUT</a></span>
+              </div>
+            )
             : (
               <div>
                 <Link route='/signup' activeClassName='active'><a>LOGIN</a></Link>

@@ -12,3 +12,4 @@ routes
   .add('compare', '/compare')
   .add('signup', '/signup')
   .add('showCompare', '/compare/:id', 'showCompare')
+  .add('profile', '/profile')

@@ -37,6 +37,7 @@ const SummaryCompare = ({ title, data, header, vAxis, chartWidth }) => {
   }
 
   const labels = data.map(array => array[0])
+  console.log(`labels: ${labels}`)
 
   /*
     label: String
@@ -65,10 +66,11 @@ const SummaryCompare = ({ title, data, header, vAxis, chartWidth }) => {
   ]
 
   datasets.forEach(dataset => { console.log(JSON.stringify(dataset)) })
+  console.log(JSON.stringify(datasets))
 
   return (
     <>
-      <div>
+      <div className='domains'>
         <Radar
           width={15}
           height={15}
@@ -77,6 +79,16 @@ const SummaryCompare = ({ title, data, header, vAxis, chartWidth }) => {
           chartWidth={chartWidth}
         />
       </div>
+      <style jsx>
+        {`
+          .domains {
+            box-shadow: 0 2px 2px 0 rgba(0,0,0,.16), 0 0 2px 0 rgba(0,0,0,.12);
+            margin-top: 10px;
+            padding: 10px;
+            text-align: left;
+          }
+        `}
+      </style>
     </>
   )
 }

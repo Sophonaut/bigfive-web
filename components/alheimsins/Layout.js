@@ -61,9 +61,9 @@ const Layout = ({ user, children, t }) => (
           display: grid;
           grid-template-areas:
             "header header header"
-            ". content ."
+            "content content content"
             "footer footer footer";
-          grid-template-columns: 1fr 2fr 1fr;
+            grid-template-columns: 1fr 2fr 1fr;
           grid-template-rows: auto 1fr auto;
           min-height: 100vh;
         }
@@ -74,8 +74,9 @@ const Layout = ({ user, children, t }) => (
         }
         .main {
           grid-area: content;
-          width: 100%;
           height: 100%;
+          margin: 0% 5%;
+          padding: 0% 5%;
         }
         .main a {
           color: #bd10e0;

@@ -90,6 +90,7 @@ export default class ShowResult extends Component {
 
   render () {
     const { results, chartWidth } = this.state
+    console.log(JSON.stringify(results))
     const { id } = this.props.query
     const currentUrl = URL + '/result/'
     return (

@@ -46,8 +46,6 @@ const ColumnChart = ({ title, data, vAxis, chartWidth }) => (
 )
 
 const renderCharts = (chartType, props) => {
-  console.log('triggered renderCharts')
-  console.log('props: ' + JSON.stringify(props))
   switch (chartType) {
     case 'ColumnChart': return <ColumnChart {...props} />
     case 'RadarChart': return <RadarChart {...props} />
@@ -88,7 +86,7 @@ export default class extends Component {
             .selected {
               background-color: rgb(230, 230, 230);
               border-radius: 10px;
-            }
+            } 
           `}
         </style>
       </>

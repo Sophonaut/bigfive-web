@@ -73,21 +73,21 @@ export default class extends Component {
             {error && <p style={{ fontSize: '10px', color: '#ff0033' }}>{error}</p>}
             <Button value='Add' type='submit' disabled={!validMongoId(formattedId) || !id || !name} />
           </form>
-          <style jsx>
-            {`
-              .persons {
-                padding: 8px;
-                font-size: 14px;
-              }
-              .persons a {
-                font-size: 18px;
-              }
-              .persons:nth-of-type(even) {
-                background: rgb(234, 234, 234);
-              }
-            `}
-          </style>
         </div>
+        <style jsx>
+          {`
+            .persons {
+              padding: 8px;
+              font-size: 14px;
+            }
+            .persons a {
+              font-size: 18px;
+            }
+            .persons:nth-of-type(even) {
+              background: rgb(234, 234, 234);
+            }
+          `}
+        </style>
       </div>
     )
   }
