@@ -41,8 +41,6 @@ UserSchema.methods.toAuthJSON = (user) => {
   }
 }
 
-// UserSchema.methods.updateResults = function (results) {}
-
 UserSchema.plugin(uniqueValidator, { message: 'is already taken.' })
 
 module.exports = model('User', UserSchema)

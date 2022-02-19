@@ -4,6 +4,7 @@ import React from 'react'
 import { Router } from '../routes'
 import * as gtag from '../lib/gtag'
 import { authenticationService } from '../lib/auth.service'
+import { TokenProvider } from '../hooks/token'
 
 Router.onRouteChangeComplete = url => gtag.pageview(url)
 
@@ -33,9 +34,39 @@ export default class MyApp extends App {
     const { Component, pageProps } = this.props
     const { currentUser } = this.state
     return (
-      <Layout user={currentUser}>
-        <Component {...pageProps} />
-      </Layout>
+      <TokenProvider>
+        <Layout user={currentUser}>
+          <Component {...pageProps} />
+        </Layout>
+      </TokenProvider>
     )
   }
 }
+
+// const MyApp = ({ Component, pageProps }) => {
+//   const [currentUser, setCurrentUser] = useState()
+
+//   useEffect(() => {
+//     setCurrentUser(authenticationService.currentUser.subscribe(user))
+//   })
+
+//   return (
+//     <TokenProvider>
+//       <Layout user={currentUser}>
+//         <Component {...pageProps} />
+//       </Layout>
+//     </TokenProvider>
+//   )
+// }
+
+// MyApp.getInitialProps = async ({ Component, router, ctx, ctx: { query, req }}) => {
+//   let componentProps = {}
+//     const path = req && req.url ? req.url : false
+//     const countryCode = req && req.requestCountryCode ? req.requestCountryCode.toLowerCase() : 'en'
+//     // const ip = ctx && ctx.req ? ctx.req.socket.remoteAddress : false
+//     if (Component.getInitialProps) {
+//       componentProps = await Component.getInitialProps(ctx)
+//     }
+//     const pageProps = Object.assign({}, componentProps, { query, path, countryCode })
+//     return { pageProps }
+// }

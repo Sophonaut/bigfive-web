@@ -1,7 +1,10 @@
-const ProfileContent = ({ props }) => {
+import Resume from './Resume'
+
+const ProfileContent = ({ results, chartWidth }) => {
+  console.log(`logging results from ProfileContent: ${JSON.stringify(results)}`)
   return (
     <div className='main-content'>
-      <h1>Hello World!</h1>
+      <Resume data={results} chartWidth={chartWidth} />
       <style jsx>
         {`
         .main-content {

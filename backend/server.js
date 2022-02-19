@@ -105,15 +105,15 @@ i18n
           const userId = JSON.parse(Buffer.from(token[1], 'base64').toString('ascii')).id
 
           if (userId) {
-            const user = User.findOne({ _id: mongo.ObjectId(userId) }, (err) => {
-              if (err) { throw err }
-              if (!user) { return res.sendStatus(401) }
-            }).then((user) => {
-              user.results.push(req.body.result)
-              user.save((err) => {
-                if (err) throw err
+            User.findOne({ _id: mongo.ObjectId(userId) })
+              .exec()
+              .then((user) => {
+                user.results.push(req.body.result)
+                user.save((err) => {
+                  if (err) throw err
+                })
               })
-            })
+              .catch(err => { throw new Error(err) })
           }
 
           const payload = req.body.result
