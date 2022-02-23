@@ -1,93 +1,85 @@
-// import { useEffect, useState, useRef } from 'react'
-// import Sidebar from '../components/Sidebar'
-// import ProfileContent from '../components/ProfileContent'
-// import { getItem } from '../lib/localStorageStore'
-// import { getResultFromUser } from '../lib/fetch-result'
-import ShowResult from './showResult'
+import { useEffect, useState, useRef, useContext } from 'react'
+import Sidebar from '../components/Sidebar'
+import ProfileContent from '../components/ProfileContent'
+import { getItem } from '../lib/localStorageStore'
+import { getResultFromUser } from '../lib/fetch-result'
+import { TokenContext } from '../hooks/token'
 
 const Profile = ({ props }) => {
-  // const [results, setResults] = useState({ results: {} })
-  // const [chartWidth, setChartWidth] = useState(0)
-  // const [loading, setLoading] = useState(true)
-  // let isMounted = useRef(false)
+  const { token, setToken } = useContext(TokenContext)
+  const [results, setResults] = useState([])
+  const [chartWidth, setChartWidth] = useState(600)
+  const [loading, setLoading] = useState(true)
+  let isMounted = useRef(false)
 
-  // // useEffect(async () => {
-  // //   getResultFromUser()
-  // //     .then(result => {
-  // //       setResults({ result: result })
-  // //     })
-  // //   const chartWidth = window.innerWidth * 0.85
-  // //   setChartWidth({ chartWidth })
-  // // }, [chartWidth])
+  const checkToken = async () => {
+    if (!token || token === null) {
+      setToken(JSON.parse(getItem('currentUser')).token)
+    }
+  }
 
-  // const checkToken = async () => {
-  //   if (token === null) {
-  //     console.log(`in checkToken and token is null`)
-  //     setToken(JSON.parse(getItem('currentUser')).token)
-  //   }
-  // }
+  const fetchData = async () => {
+    if (isMounted) {
+      const ret = await getResultFromUser(token)
+      setResults(ret)
+    }
+  }
 
-  // useEffect(() => {
-  //   isMounted = true
-  //   const fetchData = async () => {
+  useEffect(() => {
+    const setWidth = () => {
+      console.log('resizing')
+      console.log(`window.innerWidth * 0.85: ${window.innerWidth * 0.85}`)
+      setChartWidth(window.innerWidth * 0.85)
+    }
 
-  //     if (!token) {
-  //       setToken(JSON.parse(getItem('currentUser')).token)
-  //     }
+    window.addEventListener('resize', setWidth)
+    return () => {
+      window.removeEventListener('resize', setWidth)
+    }
+  }, [chartWidth])
 
-  //     if (isMounted) {
-  //       const ret = await getResultFromUser(token)
-  //       setResults(ret)
-  //     }
-  //     // return ret
-  //   }
+  useEffect(() => {
+    isMounted = true
 
-  //   checkToken()
-  //     .then(fetchData())
-  //     .then(setLoading(false))
-  //   window.addEventListener('resize', getWidth)
+    checkToken()
+      .then(fetchData())
+      .then(setLoading(false))
 
-  //   return () => {
-  //     isMounted = false
-  //     window.removeEventListener('resize', getWidth)
-  //   }
-  // }, [loading, results.length])
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
-  // if (loading) return <p>Loading...</p>
+  return loading ? <p>Loading...</p> : (
+    <>
+      <h2>Profile</h2>
+      <div className='profile-container'>
+        <Sidebar className='sidebar' />
+        {results &&
+          <ProfileContent className='main' results={results} chartWidth={chartWidth} />}
+        <style jsx>
+          {`
+        .profile-container {
+          display: grid;
+          grid-template-columns: 0.5fr 2.5fr;
+          height: 100%;
+          gap: 10px;
+          width: 3fr;
 
-  return (
-  // <>
-  //   <h2>Profile</h2>
-  //   <div className='profile-container'>
-  //     <Sidebar className='sidebar' />
-  //     <ProfileContent className='main' results={results} chartWidth={chartWidth}/>
-  //     <style jsx>
-  //       {`
-  //       .profile-container {
-  //         display: grid;
-  //         grid-template-columns: 0.5fr 2.5fr;
-  //         min-height: 100vh;
-  //         gap: 10px;
-  //       }
+        }
 
-  //       .sidebar {
-  //         grid-column: 1;
-  //       }
+        .sidebar {
+          grid-column: 1;
+        }
 
-    //       .main {
-    //         grid-column: 2;
-    //       }
-    //       `}
-    //     </style>
-    //   </div>
-    // </>
-    <ShowResult />
+        .main {
+          grid-column: 2;
+        }
+        `}
+        </style>
+      </div>
+    </>
   )
 }
-
-// Profile.getInitialProps = async () => {
-//   const results = await getResultFromUser()
-//   return { results }
-// }
 
 export default Profile

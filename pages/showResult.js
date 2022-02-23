@@ -152,6 +152,14 @@ const ShowResult = () => {
     }
   }, [loading, results.length])
 
+  useEffect(() => {
+    window.addEventListener('resize', getWidth)
+
+    return () => {
+      window.removeEventListener('resize', getWidth)
+    }
+  }, [chartWidth])
+
   if (loading) return <p>Loading...</p>
 
   return (

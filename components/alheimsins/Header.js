@@ -12,7 +12,7 @@ const handleLogout = (setToken) => {
 }
 
 const Header = ({ user, info }) => {
-  const { setToken } = useContext(TokenContext)
+  const { token, setToken } = useContext(TokenContext)
   return (
     <>
       <header>
@@ -38,7 +38,7 @@ const Header = ({ user, info }) => {
             {user
               ? (
                 <div>
-                  <Link route='/profile' activeClassName='active'><a>PROFILE</a></Link>
+                  <Link route='/profile' params={token} activeClassName='active'><a>PROFILE</a></Link>
                   <span onClick={() => handleLogout(setToken)} className='active'><a>LOGOUT</a></span>
                 </div>
               )
