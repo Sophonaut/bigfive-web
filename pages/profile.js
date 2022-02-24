@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, useContext } from 'react'
 import Sidebar from '../components/Sidebar'
 import ProfileContent from '../components/ProfileContent'
+import Invitations from '../components/Invitations'
 import { getItem } from '../lib/localStorageStore'
 import { getResultFromUser } from '../lib/fetch-result'
 import { TokenContext } from '../hooks/token'
@@ -10,6 +11,7 @@ const Profile = ({ props }) => {
   const [results, setResults] = useState([])
   const [chartWidth, setChartWidth] = useState(600)
   const [loading, setLoading] = useState(true)
+  const [active, setActive] = useState('dashboard')
   let isMounted = useRef(false)
 
   const checkToken = async () => {
@@ -24,19 +26,6 @@ const Profile = ({ props }) => {
       setResults(ret)
     }
   }
-
-  useEffect(() => {
-    const setWidth = () => {
-      console.log('resizing')
-      console.log(`window.innerWidth * 0.85: ${window.innerWidth * 0.85}`)
-      setChartWidth(window.innerWidth * 0.85)
-    }
-
-    window.addEventListener('resize', setWidth)
-    return () => {
-      window.removeEventListener('resize', setWidth)
-    }
-  }, [chartWidth])
 
   useEffect(() => {
     isMounted = true
@@ -54,9 +43,13 @@ const Profile = ({ props }) => {
     <>
       <h2>Profile</h2>
       <div className='profile-container'>
-        <Sidebar className='sidebar' />
-        {results &&
-          <ProfileContent className='main' results={results} chartWidth={chartWidth} />}
+        <Sidebar className='sidebar' setActive={setActive} />
+        {
+          {
+            'dashboard': <ProfileContent className='main' setChartWidth={setChartWidth} results={results} chartWidth={chartWidth} />,
+            'invitations': <Invitations />
+          }[active]
+        }
         <style jsx>
           {`
         .profile-container {

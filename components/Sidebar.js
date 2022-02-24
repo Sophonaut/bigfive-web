@@ -1,11 +1,18 @@
-const Sidebar = ({ props }) => {
+import { useState } from "react"
+
+const Sidebar = ({ props, setActive }) => {
+  function handleClick(event) {
+    event.preventDefault()
+    setActive(event.target.className.split(" ").slice(-1)[0])
+  }
+
   return (
     <div className='sidebar'>
       <p><b><u>Profile Options</u></b></p>
       <ul>
-        <li>Dashboard</li>
-        <li>Invitations</li>
-        <li>User Settings</li>
+        <li className='dashboard' onClick={handleClick}>Dashboard</li>
+        <li className='invitations' onClick={handleClick}>Invitations</li>
+        <li className='settings' onClick={handleClick}>User Settings</li>
       </ul>
       <style jsx>
         {`
