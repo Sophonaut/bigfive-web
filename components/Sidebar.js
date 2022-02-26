@@ -1,7 +1,8 @@
-const Sidebar = ({ props, setActive }) => {
+const Sidebar = ({ props, setActive, setTitle }) => {
   function handleClick (event) {
     event.preventDefault()
     setActive(event.target.className.split(' ').slice(-1)[0])
+    setTitle(event.target.innerText)
   }
 
   return (
@@ -15,9 +16,15 @@ const Sidebar = ({ props, setActive }) => {
       <style jsx>
         {`
       .sidebar {
-        background: cyan !important;
         min-width: 150px;
         padding: 22px 0px 0px 22px;
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+      }
+
+      .sidebar > * {
+        text-align: center;
       }
 
       ul {
@@ -25,15 +32,22 @@ const Sidebar = ({ props, setActive }) => {
         padding: 0;
         margin: 0;
       }
-
+      
       li {
-        text-align: left;
-        padding-top: 10px;
+        padding: 5px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+
+      li:hover {
+        background-color: #ddd;
+        animation: ease-in 0.5s;
       }
 
       p {
         margin: 0;
         text-align: left;
+        padding-bottom: 5px;
       }
       `}
       </style>

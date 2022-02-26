@@ -12,6 +12,7 @@ const Profile = ({ props }) => {
   const [chartWidth, setChartWidth] = useState(600)
   const [loading, setLoading] = useState(true)
   const [active, setActive] = useState('dashboard')
+  const [title, setTitle] = useState('Dashboard')
   let isMounted = useRef(false)
 
   const checkToken = async () => {
@@ -41,9 +42,9 @@ const Profile = ({ props }) => {
 
   return loading ? <p>Loading...</p> : (
     <>
-      <h2>Profile</h2>
+      <h2>{title}</h2>
       <div className='profile-container'>
-        <Sidebar className='sidebar' setActive={setActive} />
+        <Sidebar className='sidebar' setActive={setActive} setTitle={setTitle} />
         {
           {
             dashboard: <ProfileContent className='main' setChartWidth={setChartWidth} results={results} chartWidth={chartWidth} />,

@@ -27,7 +27,6 @@ const ProfileContent = ({ results, chartWidth, setChartWidth }) => {
       <style jsx>
         {`
         .main-content {
-          background: coral !important;
           width: 100%;
           display: flex;
           justify-content: center;
