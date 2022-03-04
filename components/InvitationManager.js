@@ -1,9 +1,12 @@
 import { Button } from './alheimsins'
+import InviteShare from './InviteShare'
 
-const Invitations = () => {
+const InvitationManager = () => {
   return (
-    <div className='invitations-list'>
-      <h1>Manage Results Sharing</h1>
+    <div className='container'>
+      <InviteShare />
+
+      <h2>Manage Results Sharing</h2>
       <div className='invitation'>
         <p>test@gmail.com</p>
         <div className='buttons'>
@@ -13,7 +16,7 @@ const Invitations = () => {
       </div>
       <style jsx>
         {`
-        .invitations-list {
+        .container {
           display: flex;
           flex-flow: column;
         }
@@ -39,4 +42,4 @@ const Invitations = () => {
   )
 }
 
-export default Invitations
+export default InvitationManager

@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useContext } from 'react'
 import Sidebar from '../components/Sidebar'
 import ProfileContent from '../components/ProfileContent'
-import Invitations from '../components/Invitations'
+import InvitationManager from '../components/InvitationManager'
 import Settings from '../components/Settings'
 import { getItem } from '../lib/localStorageStore'
 import { getResultFromUser } from '../lib/fetch-result'
@@ -50,7 +50,7 @@ const Profile = ({ props }) => {
         {
           {
             dashboard: <ProfileContent className='main' setChartWidth={setChartWidth} results={results} chartWidth={chartWidth} />,
-            invitations: <Invitations />,
+            invitations: <InvitationManager />,
             settings: <Settings />
           }[active]
         }

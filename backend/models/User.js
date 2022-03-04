@@ -20,7 +20,7 @@ const UserSchema = new Schema({
     on their most recent results at the time of comparison request
 
     It probably also makes sense to update the model with latestResult and allow an easy lookup
-    for the result rather than performing this operation solely on the user model array to prevent bloat
+    for the result rather than performing this operation solely on the user model arrayto
   */
   whitelist: { type: Array, required: false }
 }, { timestamps: true })

@@ -31,7 +31,7 @@ router.post('/invitations', async (req, res, next) => {
   } catch (err) {
     console.log(err.stack)
   }
-  if (!user) { return res.status(401).json({ success: false, message: "We weren't able to send this invitation" }) }
+  if (!user) { return res.status(400).json({ success: false, message: "We weren't able to send this invitation" }) }
 
   // initialize invitation fields if users are both valid
   invitation.invitee = invitee.email
