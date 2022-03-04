@@ -126,6 +126,9 @@ i18n
         // api/users routes mounted
         server.use('/api/', userRoutes)
 
+        // add invitation routes
+        // server.use('/api/', invitationRoutes)
+
         // api/stripe routes mounted
         server.use('/api/', stripeRoutes)
 

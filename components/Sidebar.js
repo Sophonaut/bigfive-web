@@ -15,40 +15,40 @@ const Sidebar = ({ props, setActive, setTitle }) => {
       </ul>
       <style jsx>
         {`
-      .sidebar {
-        min-width: 150px;
-        padding: 22px 0px 0px 22px;
-        display: flex;
-        flex-flow: column;
-        align-items: center;
-      }
+        .sidebar {
+          min-width: 150px;
+          padding: 22px 0px 0px 22px;
+          display: flex;
+          flex-flow: column;
+          align-items: center;
+        }
 
-      .sidebar > * {
-        text-align: center;
-      }
+        .sidebar > * {
+          text-align: center;
+        }
 
-      ul {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-      }
-      
-      li {
-        padding: 5px;
-        cursor: pointer;
-        border-radius: 5px;
-      }
+        ul {
+          list-style-type: none;
+          padding: 0;
+          margin: 0;
+        }
+        
+        li {
+          padding: 5px;
+          cursor: pointer;
+          border-radius: 5px;
+        }
 
-      li:hover {
-        background-color: #ddd;
-        animation: ease-in 0.5s;
-      }
+        li:hover {
+          background-color: #ddd;
+          animation: ease-in 0.5s;
+        }
 
-      p {
-        margin: 0;
-        text-align: left;
-        padding-bottom: 5px;
-      }
+        p {
+          margin: 0;
+          text-align: left;
+          padding-bottom: 5px;
+        }
       `}
       </style>
     </div>
