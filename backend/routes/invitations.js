@@ -23,7 +23,7 @@ router.post('/invitations', async (req, res, next) => {
   } catch (err) {
     console.log(err.stack)
   }
-  if (!invitee) { return res.status(401).json({ success: false, message: 'Unable to find user' }) }
+  if (!invitee) { return res.status(400).json({ success: false, message: 'Unable to find user' }) }
 
   // pull user inviting another based on token stored in context
   try {
@@ -39,7 +39,14 @@ router.post('/invitations', async (req, res, next) => {
   invitation.accepted = false
 
   invitation.save()
-    .then(result => {
+    .then(async result => {
+      // check this to ensure that ID is being added after the save to DB
+      console.log(JSON.stringify(result))
+
+      // after this we'll need to update the user model for the invitee with their pending invitations
+      invitee.invitations.push({ _id: result._id, invitee: invitee.email })
+      await invitee.save()
+
       return res.json({ invitation: result })
     })
     .catch(next)
