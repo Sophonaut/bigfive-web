@@ -2,16 +2,10 @@ import { Component } from 'react'
 import { Router } from '../routes'
 import LanguageBar from '../components/LanguageBar'
 import { Button, ProgressBar, RadioGroup, Radio } from '../components/alheimsins'
-import getConfig from 'next/config'
-import axios from 'axios'
+import http from '../config/axiosConfig'
 import { FaInfoCircle } from 'react-icons/fa'
 import { populateData, restoreData, getProgress, clearItems, setItem, getItem } from '../lib/localStorageStore'
 
-const { publicRuntimeConfig } = getConfig()
-const http = axios.create({
-  baseURL: publicRuntimeConfig.URL,
-  timeout: 8000
-})
 const { getItems: getInventory, getInfo } = require('@alheimsins/b5-johnson-120-ipip-neo-pi-r')
 const getItems = require('../lib/get-items')
 const sleep = require('../lib/sleep')

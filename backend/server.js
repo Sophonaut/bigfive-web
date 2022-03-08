@@ -22,8 +22,10 @@ const handler = routes.getRequestHandler(app)
 const port = parseInt(process.env.PORT, 10) || 3000
 const express = require('express')
 require('./models/User')
+require('./models/Invitation')
 require('./shared/passport')
 const userRoutes = require('./routes/users')
+const invitationRoutes = require('./routes/invitations')
 const stripeRoutes = require('./routes/stripe')
 
 i18n
@@ -126,8 +128,8 @@ i18n
         // api/users routes mounted
         server.use('/api/', userRoutes)
 
-        // add invitation routes
-        // server.use('/api/', invitationRoutes)
+        // api/invitations routes mounted
+        server.use('/api/', invitationRoutes)
 
         // api/stripe routes mounted
         server.use('/api/', stripeRoutes)

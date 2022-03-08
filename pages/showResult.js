@@ -1,16 +1,10 @@
 import { useContext, useEffect, useState, useRef } from 'react'
 import calculateScore from 'bigfive-calculate-score'
 import getResult from '@sophonaut/b5-result-text'
-import axios from 'axios'
-// import { Code } from '../components/alheimsins'
-import getConfig from 'next/config'
 import Resume from '../components/Resume'
-// import SocialShare from '../components/SocialShare'
 import { getItem } from '../lib/localStorageStore'
-// import validMongoId from '../lib/valid-mongoid'
-// import formatId from '../lib/format-id'
 import { TokenContext } from '../hooks/token'
-// import { getResultFromUser } from '../lib/fetch-result'
+import http from '../config/axiosConfig'
 
 // // TODO: convert showResult to functional component
 // const getResultFromId = async id => {
@@ -94,13 +88,6 @@ import { TokenContext } from '../hooks/token'
 // }
 
 const ShowResult = () => {
-  const { publicRuntimeConfig: { URL } } = getConfig()
-
-  const httpInstance = axios.create({
-    baseURL: URL,
-    timeout: 8000
-  })
-
   const { token, setToken } = useContext(TokenContext)
   const [chartWidth, setChartWidth] = useState(600)
   const [results, setResults] = useState([])
@@ -117,7 +104,7 @@ const ShowResult = () => {
   const getResultFromUser = async token => {
     if (!token) throw new Error('Still waiting for token')
 
-    const { data } = await httpInstance.get(`/api/user/${token}`)
+    const { data } = await http.get(`/api/user/${token}`)
     if (!data) throw new Error("User doesn't exist, or there was some sort of error")
     const scores = calculateScore(data.result)
     return getResult({ scores, lang: data.lang || 'en' })
