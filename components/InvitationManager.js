@@ -1,19 +1,12 @@
-import { Button } from './alheimsins'
 import InviteShare from './InviteShare'
+import InviteList from './InviteList'
 
 const InvitationManager = () => {
   return (
     <div className='container'>
       <InviteShare />
-
-      <h2>Manage Results Sharing</h2>
-      <div className='invitation'>
-        <p>test@gmail.com</p>
-        <div className='buttons'>
-          <Button type='submit' value='Share' width='80px' />
-          <Button type='submit' value='Decline' width='80px' />
-        </div>
-      </div>
+      <hr />
+      <InviteList />
       <style jsx>
         {`
         .container {
@@ -21,20 +14,15 @@ const InvitationManager = () => {
           flex-flow: column;
         }
 
-        .invitation {
-          display: flex;
-          flex-flow: row;
-          justify-content: space-around;
-          align-items: center;
+        hr {
+          width: 100%;
+          color: #000;
+          border-top: #333;
+          border-left: #fff;
         }
 
-        .buttons {
-          display: flex;
-          flex-flow: row;
-          justify-content: space-around;
-          align-items: center;
-          width: 25%;
-          min-width: 170px;
+        hr:after {
+          background: #999;
         }
       `}
       </style>

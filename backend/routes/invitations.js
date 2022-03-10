@@ -4,21 +4,28 @@ const mongo = require('mongojs')
 const User = model('User')
 const Invitation = model('Invitation')
 
+// const util = require('util')
+// console.log(`analyzing request: ${util.inspect(req)}`)
+
+// JWT conversion helper
+const tokenCheck = (req) => {
+  let token = req.body && req.body.token ? req.body.token.split('.') : false
+  if (!token) token = req.params && req.params.token ? req.params.token.split('.') : false
+  if (!token) throw new Error('Not a valid query')
+  return JSON.parse(Buffer.from(token[1], 'base64').toString('ascii')).id
+}
+
 /*
   POST: Should insert an invitation into both users' queues on their documents, along with the objectId
   for the invitation
 */
 router.post('/invitations', async (req, res, next) => {
-  // console.log(`analyzing request: ${util.inspect(req)}`)
-
   const invitation = new Invitation()
-
   let invitee = req.body.invitee
   let user = ''
 
-  const token = req.body && req.body.token ? req.body.token.split('.') : false
-  if (!token) throw new Error('Not a valid query')
-  const userId = JSON.parse(Buffer.from(token[1], 'base64').toString('ascii')).id
+  const currentUserId = tokenCheck(req)
+  console.log(`currentUserId check: ${currentUserId}`)
 
   // pull invitee information based on email provided by user
   try {
@@ -27,39 +34,32 @@ router.post('/invitations', async (req, res, next) => {
     console.log(err.stack)
   }
   if (!invitee) { return res.status(400).json({ success: false, message: 'Unable to find user' }) }
-  if (invitee._id === userId) { return res.status(400).json({ success: false, message: 'Unable to share results with self!' }) }
+  if (invitee._id.toString() === currentUserId) { return res.status(400).json({ success: false, message: 'Unable to share results with self!' }) }
 
   // pull user inviting another based on token stored in context
   try {
-    user = await User.findOne({ _id: mongo.ObjectId(userId) }).exec()
+    user = await User.findOne({ _id: mongo.ObjectId(currentUserId) }).exec()
   } catch (err) {
     console.log(err.stack)
   }
-  if (!user) { return res.status(400).json({ success: false, message: "We weren't able to send this invitation" }) }
+  if (!user) { return res.status(400).json({ success: false, message: "We weren't able to send this invitation...are you logged in?" }) }
 
   console.log(`checking invitee's invitations queue: ${JSON.stringify(invitee.invitations)}`)
 
+  // check duplicate invitations and assign filter results to duplicates
   let duplicates = false
   if (invitee.invitations.length > 0) {
     duplicates = invitee.invitations.filter(invitation => {
-      console.log(`invitee in mongo: ${invitation.invitee} 
-      invitee in request: ${invitee.email}
-      checking equivalence: ${invitation.invitee === invitee.email}
-      createdBy in invitation: ${invitation.createdBy}
-      createdBy in request: ${user.email}
-      checking equivalence: ${invitation.createdBy === user.email}
-      `)
       return invitation.invitee === invitee.email && invitation.createdBy === user.email
     })
   }
   if (duplicates.length > 0) {
-    console.log(`duplicates must exist because we're in this conditional, so let's analyze: ${JSON.stringify(duplicates)}`)
-    return res.status(400).json({ message: 'Invite for this user already exists' })
+    return res.status(400).json({ message: 'Invite for this user already exists!' })
   }
 
   // initialize invitation fields if users are both valid
-  invitation.invitee = invitee.email
-  invitation.createdBy = user.email
+  invitation.invitee = { email: invitee.email, _id: invitee._id.toString() }
+  invitation.createdBy = { email: user.email, _id: currentUserId }
   invitation.accepted = false
 
   invitation.save()
@@ -77,12 +77,29 @@ router.post('/invitations', async (req, res, next) => {
 })
 
 /*
+  GET: Simply retrieve user's invite actions to take
+*/
+router.get('/invitations/:token', async (req, res) => {
+  let user = {}
+  const currentUserId = tokenCheck(req)
+
+  try {
+    user = await User.findOne({ _id: mongo.ObjectId(currentUserId) }).exec()
+  } catch (err) {
+    console.log(err.stack)
+  }
+  if (!user) { return res.status(400).json({ success: false, message: "We weren't able to retrieve your invitations...are you logged in?" }) }
+
+  return res.json({ invitations: user.invitations })
+})
+
+/*
   PUT: Should update the invitation to true, and move the invitation object from the users' documents
   to the whitelist
 */
 
-// router.put('/invitations', (req, res, next) => {
+router.put('/invitations', (req, res, next) => {
 
-// })
+})
 
 module.exports = router

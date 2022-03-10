@@ -35,19 +35,27 @@ const InviteShare = () => {
   }
 
   return (
-    <div className='container'>
-      <Field name='Email' style={{ width: '300px' }}>
-        <InputText className='input' email='email' value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Email of user to compare with' autoComplete='off' autoFocus />
-      </Field>
-      <Button value='Submit' type='submit' disabled={!email || !email.match(/\S+@\S+\.\S+/)} onClick={handleSubmit} />
+    <div className='wrapper'>
+      <h3>Share Results With Others</h3>
+      <div className='invite-container'>
+        <Field name='Email' style={{ width: '300px', paddingTop: '10px' }}>
+          <InputText className='input' email='email' value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Email of user to compare with' autoComplete='off' autoFocus />
+        </Field>
+        <Button value='Submit' type='submit' disabled={!email || !email.match(/\S+@\S+\.\S+/)} onClick={handleSubmit} />
+      </div>
       <style jsx>
         {`
-          .container {
+          .wrapper {
+            display: flex;
+            flex-flow: column;
+            min-height: 0;
+          }
+
+          .invite-container {
             display: flex;
             flex-flow: row;
             justify-content: space-around;
             align-items: center;
-            min-height: 0;
           }
         `}
       </style>

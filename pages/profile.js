@@ -50,7 +50,7 @@ const Profile = ({ props }) => {
         {
           {
             dashboard: <ProfileContent className='main' setChartWidth={setChartWidth} results={results} chartWidth={chartWidth} />,
-            invitations: <InvitationManager />,
+            invitations: <InvitationManager token={token} />,
             settings: <Settings />
           }[active]
         }

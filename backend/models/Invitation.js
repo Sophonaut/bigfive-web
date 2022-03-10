@@ -12,8 +12,8 @@ const { model, Schema } = require('mongoose')
 
 const InvitationSchema = new Schema({
   //  Users should be a pretty simple combination of objectId and email
-  createdBy: { type: String, required: true, match: [/\S+@\S+\.\S+/, 'is invalid'], index: true },
-  invitee: { type: String, required: true, match: [/\S+@\S+\.\S+/, 'is invalid'] },
+  createdBy: { type: Map, required: true, match: [/\S+@\S+\.\S+/, 'is invalid'], index: true },
+  invitee: { type: Map, required: true, match: [/\S+@\S+\.\S+/, 'is invalid'] },
   accepted: { type: Boolean, required: true }
 })
 
