@@ -7,8 +7,10 @@ import getConfig from 'next/config'
 import Summary from '../components/Summary'
 import Domain from '../components/Domain'
 import SocialShare from '../components/SocialShare'
+import { getItem } from '../lib/localStorageStore'
 import validMongoId from '../lib/valid-mongoid'
 import formatId from '../lib/format-id'
+
 const { publicRuntimeConfig: { URL } } = getConfig()
 
 const httpInstance = axios.create({
@@ -21,6 +23,14 @@ const getResultFromId = async id => {
   if (!validMongoId(formattedId)) throw new Error('Invalid id')
   const { data } = await httpInstance.get(`/api/get/${formattedId}`)
   const scores = calculateScore(data)
+  return getResult({ scores, lang: data.lang || 'en' })
+}
+
+// Could be encrypted / decrypted to more safely handle
+const getResultFromUser = async token => {
+  const { data } = await httpInstance.get(`/api/user/${token}`)
+  if (!data) throw new Error("User doesn't exist, or there was some sort of error")
+  const scores = calculateScore(data.result)
   return getResult({ scores, lang: data.lang || 'en' })
 }
 
@@ -47,7 +57,6 @@ export default class ShowResult extends Component {
       const results = await getResultFromId(query.id)
       return { results }
     }
-    return {}
   }
 
   constructor (props) {
@@ -58,7 +67,11 @@ export default class ShowResult extends Component {
     this.getWidth = this.getWidth.bind(this)
   }
 
-  componentDidMount () {
+  async componentDidMount () {
+    const token = JSON.parse(getItem('currentUser')).token
+    const results = await getResultFromUser(token)
+    this.setState({ results: results })
+
     window.addEventListener('resize', this.getWidth)
     if (this.props.results) {
       this.setState({ results: this.props.results })
@@ -78,7 +91,7 @@ export default class ShowResult extends Component {
   render () {
     const { results, chartWidth } = this.state
     const { id } = this.props.query
-    const currentUrl = URL + '/result/' + id
+    const currentUrl = URL + '/result/'
     return (
       <>
         <h2>Result</h2>

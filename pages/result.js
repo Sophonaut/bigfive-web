@@ -17,14 +17,16 @@ export default class extends Component {
   }
 
   componentDidMount () {
-    const resultId = getItem('result') || false
-    this.setState({ resultId })
+    const token = JSON.parse(getItem('currentUser')).token || false
+    Router.pushRoute('showResult', { token })
+    // const resultId = getItem('result') || false
+    // this.setState({ resultId })
   }
 
   handleInputSubmit (e) {
     e.preventDefault()
     const id = formatId(this.state.id)
-    Router.pushRoute('showResult', { id })
+    Router.pushRoute('showResult', { id }, { shallow: true })
   }
 
   handleInputChange ({ target }) {

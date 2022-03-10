@@ -59,6 +59,12 @@ i18n
           mongoose.set('debug', true)
         }
 
+        /*
+        The reason this is here is because I was running into an issue querying on User without using the Mongoose model.
+        I know that this gets handled in the routes bootstrapping for User, but is there a better way to handle this?
+        */
+        const User = mongoose.model('User')
+
         server.use(helmet())
         server.use(express.json())
         server.use(i18nextMiddleware.handle(i18n))
@@ -88,9 +94,29 @@ i18n
           })
         })
 
+        /*
+          Takes in the updated body, locates user based on EMAIL (yikes, could we handle this with token instead?),
+          then continues to save the result in the results collection as normal. There has to be a way to insert
+          this into the User collection without explicitly requiring the mongoose model after mongoose setup, right?
+        */
         server.post('/api/save', (req, res) => {
-          const payload = req.body
-          console.log(payload)
+          const token = req.body.user && req.body.user.token ? req.body.user.token.split('.') : false
+          if (!token) throw new Error('Not a valid query')
+          const userId = JSON.parse(Buffer.from(token[1], 'base64').toString('ascii')).id
+
+          if (userId) {
+            const user = User.findOne({ _id: mongo.ObjectId(userId) }, (err) => {
+              if (err) { throw err }
+              if (!user) { return res.sendStatus(401) }
+            }).then((user) => {
+              user.results.push(req.body.result)
+              user.save((err) => {
+                if (err) throw err
+              })
+            })
+          }
+
+          const payload = req.body.result
           collection.insert(payload, (error, data) => {
             if (error) throw error
             res.send(data)

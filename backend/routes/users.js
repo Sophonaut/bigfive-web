@@ -1,6 +1,7 @@
 const { model } = require('mongoose')
 const router = require('express').Router()
 const passport = require('passport')
+const mongo = require('mongojs')
 const User = model('User')
 const auth = require('./auth')
 const { getStripeSession } = require('./stripe')
@@ -60,8 +61,25 @@ router.get('/user', auth.required, (req, res, next) => {
   }).catch(next)
 })
 
+router.get('/user/:token', (req, res) => {
+  const token = req.params && req.params.token ? req.params.token.split('.') : false
+  if (!token) throw new Error('Not a valid query')
+  const userId = JSON.parse(Buffer.from(token[1], 'base64').toString('ascii')).id
+
+  // check to see if request is looking for particular user result, otherwise return most recently pushed
+  const userResultsIndex = req.params.index || -1
+  User.findOne({ _id: mongo.ObjectId(userId) }).then((user) => {
+    if (!user) { return res.sendStatus(401) }
+
+    // TODO: support lookup keys for returning historic results
+    return res.json({ result: user.results.slice(userResultsIndex).pop() })
+  })
+})
+
 // PUT api/user update password and or email
-// TODO refactor
+/* TODO refactor
+   Does it also make sense to make PUT user update the user model to add the results?
+*/
 router.put('/user', auth.required, (req, res, next) => {
   User.findById(req.payload.id).then((user) => {
     if (!user) { return res.sendStatus(401) }

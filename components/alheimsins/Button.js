@@ -1,4 +1,4 @@
-export default (props) => {
+const Button = props => {
   const propTypes = {
     onClick: props.onClick,
     disabled: props.disabled,
@@ -36,3 +36,5 @@ export default (props) => {
     </p>
   )
 }
+
+export default Button

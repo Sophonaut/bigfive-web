@@ -5,7 +5,7 @@ import { Button, ProgressBar, RadioGroup, Radio } from '../components/alheimsins
 import getConfig from 'next/config'
 import axios from 'axios'
 import { FaInfoCircle } from 'react-icons/fa'
-import { populateData, restoreData, getProgress, clearItems, setItem } from '../lib/localStorageStore'
+import { populateData, restoreData, getProgress, clearItems, setItem, getItem } from '../lib/localStorageStore'
 
 const { publicRuntimeConfig } = getConfig()
 const http = axios.create({
@@ -99,11 +99,15 @@ export default class extends Component {
     this.setState({ items, position, next: true, previous })
   }
 
+  async submitResults (params) {
+    await http.post('/api/save', params)
+  }
+
   async handleSubmit () {
     window.scrollTo(0, 0)
     const { items, finished, position } = getItems(this.state.position, this.state.itemsPerPage, this.state.inventory).next()
     if (finished) {
-      clearItems()
+      // clearItems()
       const answers = this.state.answers
       const choices = Object.keys(answers).reduce((prev, current) => {
         const choice = answers[current]
@@ -121,9 +125,19 @@ export default class extends Component {
         timeElapsed: Math.round((Date.now() - this.state.now) / 1000),
         dateStamp: Date.now()
       }
-      const { data } = await http.post('/api/save', result)
-      setItem('result', data._id)
-      Router.pushRoute('showResult', { id: data._id })
+      /*
+        I needed to structure the params into a higher class object because I was having issues
+        with passing multiple params into http.post so I'm destructuring them on the server side.
+      */
+      const user = {
+        token: JSON.parse(getItem('currentUser')).token
+      }
+      const params = {
+        result: result,
+        user: user
+      }
+      this.submitResults(params)
+        .then(Router.pushRoute('showResult'))
     } else {
       const next = items.filter(item => !this.state.answers[item.id]).length === 0
       this.setState({ items, position, next, previous: true, restore: false })
