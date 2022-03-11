@@ -47,6 +47,7 @@ router.post('/invitations', async (req, res, next) => {
   console.log(`checking invitee's invitations queue: ${JSON.stringify(invitee.invitations)}`)
 
   // check duplicate invitations and assign filter results to duplicates
+  // TODO: Check whitelist for existing user berfore sending invitation
   let duplicates = false
   if (invitee.invitations.length > 0) {
     duplicates = invitee.invitations.filter(invitation => {
@@ -98,8 +99,47 @@ router.get('/invitations/:token', async (req, res) => {
   to the whitelist
 */
 
-router.put('/invitations', (req, res, next) => {
+router.put('/invitations', async (req, res, next) => {
+  let invitee = {}
+  let createdBy = {}
+  let invitation = req.body._id
+  try {
+    invitation = await Invitation.findOne({ _id: mongo.ObjectId(invitation) }).exec()
+  } catch (err) {
+    console.log(err.stack)
+  }
+  if (!invitation) { return res.status(400).json({ success: false, message: "We weren't able to update this invitation." }) }
 
+  // update invitation object for recording response
+  if (req.body.selection) invitation.accepted = req.body.selection
+
+  // if true
+  // update invitee whitelist and invitation queue
+  try {
+    invitee = await User.findOne({ _id: mongo.ObjectId(invitation.invitee.get('_id')) }).exec()
+  } catch (err) {
+    console.log(err.stack)
+  }
+
+  invitee.whitelist.push(invitation.createdBy)
+  invitee.invitations = invitee.invitations.filter(invite => invite._id !== req.body._id)
+
+  // update createdBy whitelist
+  try {
+    createdBy = await User.findOne({ _id: mongo.ObjectId(invitation.createdBy.get('_id')) }).exec()
+  } catch (err) {
+    console.log(err.stack)
+  }
+
+  createdBy.whitelist.push(invitation.invitee)
+
+  await invitation.save()
+  await invitee.save()
+  await createdBy.save()
+
+  return res.json({ success: true, message: 'Invitation accepted and results shared successfully!' })
+
+  // TODO: if false         <== should this be DELETE instead?
 })
 
 module.exports = router

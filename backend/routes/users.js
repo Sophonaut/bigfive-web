@@ -70,7 +70,7 @@ router.get('/user/:token', (req, res) => {
   const userResultsIndex = req.params.index || -1
   User.findOne({ _id: mongo.ObjectId(userId) })
     .exec()
-    .then((user) => {
+    .then(user => {
       if (!user) { return res.sendStatus(401) }
 
       // TODO: support lookup keys for returning historic results

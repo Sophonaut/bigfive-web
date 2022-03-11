@@ -17,14 +17,32 @@ const InviteList = () => {
   }
 
   // handle requests for confirming invitations
-  const handleSubmit = async () => {
-    // const res = await http.put('/api/invitations')
-    console.log('accepted invitation')
+  const handleSubmit = async (idx, bool) => {
+    const params = {
+      _id: invitations[idx]._id,
+      selection: bool
+    }
+    const res = await http.put('/api/invitations', params)
+      .catch(error => catchLog(error))
+
+    /*
+      TODO: Currently handling invitation updates isn't rerendering the invitations list like it should be
+      Need to figure out why this is happening and force a rerender
+    */
+    return res.data.success
+      ? () => {
+        const updatedInvites = invitations.filter((_, i) => i !== idx)
+        setInvitations([...updatedInvites])
+      }
+      : console.log('unable to update invitations')
   }
 
   useEffect(() => {
     handleLoad().then(() => setLoading(false))
+    console.log(`handled setInvitations, invitations is updated: ${JSON.stringify(invitations)}`)
   }, [loading])
+
+  useEffect(() => { console.log(`invitations.length: ${invitations.length}`) }, [invitations.length])
 
   return loading ? <p>Loading...</p> : (
     <>
@@ -37,6 +55,7 @@ const InviteList = () => {
               {invitations.map((invitation, idx) => (
                 <Invitation
                   key={idx}
+                  idx={idx}
                   createdBy={invitation.createdBy}
                   handleSubmit={handleSubmit}
                 />
