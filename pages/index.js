@@ -8,7 +8,6 @@ const startTest = e => {
   Router.pushRoute('/test/')
 }
 
-
 const Home = () => {
   return (
     <div>
