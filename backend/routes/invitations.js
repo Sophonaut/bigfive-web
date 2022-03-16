@@ -122,7 +122,7 @@ router.put('/invitations', async (req, res, next) => {
   }
 
   invitee.whitelist.push(invitation.createdBy)
-  invitee.invitations = invitee.invitations.filter(invite => invite._id !== req.body._id)
+  invitee.invitations = invitee.invitations.filter(invite => invite._id.toString() !== req.body._id)
 
   // update createdBy whitelist
   try {
