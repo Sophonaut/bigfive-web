@@ -1,15 +1,15 @@
 import { Button } from './alheimsins'
 
-const Invitation = ({ createdBy, handleSubmit, idx }) => {
+const Invitation = ({ createdBy, handleSubmit, setIndex, setBool, index }) => {
   return (
     <>
-      <div className='invitation'>
+      <form index={index} className='invitation' onSubmit={(e) => { handleSubmit(e) }}>
         <p>{createdBy}</p>
         <div className='buttons'>
-          <Button idx={idx} type='submit' value='Share' width='80px' onClick={() => handleSubmit(idx, true)} />
-          <Button idx={idx} type='submit' value='Decline' width='80px' onClick={() => handleSubmit(idx, false)} />
+          <Button type='button' value='Share' width='80px' onClick={() => { setIndex(index); setBool(true) }} />
+          <Button type='button' value='Decline' width='80px' onClick={() => { setIndex(index); setBool(false) }} />
         </div>
-      </div>
+      </form>
       <style jsx>
         {`
         .invitation {

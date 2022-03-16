@@ -8,41 +8,50 @@ const InviteList = () => {
   const { token } = useContext(TokenContext)
   const [invitations, setInvitations] = useState([])
   const [loading, setLoading] = useState(true)
+  const [bool, setBool] = useState(false)
+  const [index, setIndex] = useState(-1)
 
-  // handle requests for retrieving invitations
+  //  On first render, retrieve invitations then set invitations state
   const handleLoad = async () => {
     const res = await http.get(`/api/invitations/${token}`)
       .catch(error => catchLog(error))
     setInvitations(res.data.invitations)
   }
 
-  // handle requests for confirming invitations
-  const handleSubmit = async (idx, bool) => {
-    const params = {
-      _id: invitations[idx]._id,
-      selection: bool
-    }
-    const res = await http.put('/api/invitations', params)
-      .catch(error => catchLog(error))
-
-    /*
-      TODO: Currently handling invitation updates isn't rerendering the invitations list like it should be
-      Need to figure out why this is happening and force a rerender
-    */
-    return res.data.success
-      ? () => {
-        const updatedInvites = invitations.filter((_, i) => i !== idx)
-        setInvitations([...updatedInvites])
-      }
-      : console.log('unable to update invitations')
-  }
-
+  // Hook to handleLoad then show relevant profile info after load
   useEffect(() => {
     handleLoad().then(() => setLoading(false))
-    console.log(`handled setInvitations, invitations is updated: ${JSON.stringify(invitations)}`)
   }, [loading])
 
-  useEffect(() => { console.log(`invitations.length: ${invitations.length}`) }, [invitations.length])
+  // Handle event default behavior then pipe to updateInvites
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    updateInvites()
+  }
+
+  // Update models in backend for invitation behavior
+  const updateInvites = async () => {
+    const params = {
+      _id: invitations[index]._id,
+      selection: bool
+    }
+    await http.put('/api/invitations', params)
+      .catch(error => catchLog(error))
+  }
+
+  // Hook to re-render Invitations after form submission
+  useEffect(() => {
+    if (bool || index > -1) {
+      updateInvites()
+      const updatedInvites = invitations.filter((_, i) => i !== index)
+      setInvitations([...updatedInvites])
+    }
+
+    return () => {
+      setBool(false)
+      setIndex(-1)
+    }
+  }, [index])
 
   return loading ? <p>Loading...</p> : (
     <>
@@ -52,12 +61,14 @@ const InviteList = () => {
           ? <p>Invitation inbox is clear!</p>
           : (
             <>
-              {invitations.map((invitation, idx) => (
+              {invitations.map((invitation, index) => (
                 <Invitation
-                  key={idx}
-                  idx={idx}
+                  key={index}
+                  index={index}
                   createdBy={invitation.createdBy}
                   handleSubmit={handleSubmit}
+                  setIndex={setIndex}
+                  setBool={setBool}
                 />
               ))}
             </>
