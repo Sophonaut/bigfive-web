@@ -56,23 +56,41 @@ const Header = ({ user, info }) => {
               grid-area: header;
               justify-self: center;
               background: white;
-              margin: auto;
-              padding: 25px;
-              max-width: 900px;
+              padding: 25px 0;
+              max-width: 100vw;
+              width: 100vw;
             }
+
             .nav-info {
-              position: absolute;
               font-size: 12px;
               left: 10%;
             }
-            .links-container, .nav-container {
-              display: inline-block;
+
+            .nav-container {
+              display: flex;
+              flex-flow: row;
+              justify-content: space-between;
+              align-items: baseline;
+              // padding: 0 30px;
+              width: 100%;
+              min-width: 100%;
+              max-width: 100%;
             }
+
+            .links-container {
+              justify-self: flex-start;
+            }
+
+            .links-container, .nav-right {
+              display: flex;
+              padding-left: 20px;
+            }
+
             .nav-right {
-              right: 20px;
-              position: absolute;
-              display: inline-block;
+              padding-right: 20px;
+              display: flex;
               font-size: 12px;
+              align-items: baseline;
             }
             a {
               color: #999;
@@ -87,7 +105,7 @@ const Header = ({ user, info }) => {
             }
             @media screen and (max-width: 800px) {
               .nav-right {
-                display: none;
+                // display: none;
               }
             }
           `}
