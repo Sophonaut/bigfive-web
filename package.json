@@ -94,6 +94,7 @@
     "request-country": "0.1.5",
     "rxjs": "^6.6.7",
     "stripe": "^8.154.0",
+    "swiper": "^6.8.4",
     "test-listen": "^1.1.0"
   },
   "devDependencies": {

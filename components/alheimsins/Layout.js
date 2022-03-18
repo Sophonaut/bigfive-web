@@ -77,6 +77,7 @@ const Layout = ({ user, children, t }) => (
           height: 100%;
           margin: 0% 5%;
           padding: 0% 5%;
+          overflow: scroll;
         }
         .main a {
           color: #bd10e0;
