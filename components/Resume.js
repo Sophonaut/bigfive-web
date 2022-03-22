@@ -13,7 +13,7 @@ const Resume = ({ data, chartWidth }) => {
         slidesPerView={1}
         slidesPerGroup={1}
         slidesOffsetAfter={0}
-        spaceBetween={50}
+        spaceBetween={300}
         watchOverflow
         className='resume-swiper'
       >
@@ -34,17 +34,15 @@ const Resume = ({ data, chartWidth }) => {
           }
           .resume-swiper {
             height: 90%;
-            width: 90%;
           }
           .resume-swiper .swiper-pagination {
             top: 10px;
           }
           .domains {
-            box-shadow: 0 2px 2px 0 rgba(0,0,0,.16), 0 0 2px 0 rgba(0,0,0,.12);
-            margin-top: 10px;
+            box-shadow: 0 5px 5px 0 rgba(0,0,0,.16), 0 0 5px 0 rgba(0,0,0,.12);
             padding: 10px;
             text-align: left;
-            margin: auto;
+            margin: 20px auto;
             width: 90%;
             position: relative;
           }

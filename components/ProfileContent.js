@@ -28,8 +28,9 @@ const ProfileContent = ({ results, chartWidth, setChartWidth }) => {
         {`
         .main-content {
           width: 100%;
-          display: flex;
+          display: inline-flex;
           justify-content: center;
+          max-height: ${1.2 * chartWidth}px;
         }
 
         .domains {

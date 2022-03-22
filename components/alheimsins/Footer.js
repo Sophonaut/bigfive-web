@@ -58,7 +58,9 @@ const Footer = () =>
         color: white;
       }
       footer {
-        grid-area: footer;
+        // grid-area: footer;
+        position: absolute;
+        width: 100%;
         background: black;
         color: #666;
         font-size: 12px;
@@ -66,6 +68,7 @@ const Footer = () =>
         display: flex;
         justify-content: center;
         align-items: center;
+        resize: both;
       }
     `}
     </style>

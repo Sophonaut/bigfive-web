@@ -13,6 +13,7 @@ const ProgressBar = ({ progress }) =>
         border: 1px;
         border-radius: 5px;
         width: 100%;
+        position: relative;
       }
       .percent {
         position: absolute;

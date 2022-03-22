@@ -42,6 +42,7 @@ export default class extends Component {
           modules={[Pagination]}
           pagination
           slidesPerView={1}
+          spaceBetween={0}
         >
           <SwiperSlide key={data.title} className='domain-wrapper'>
             <ShortcutH1 name={data.title} />
@@ -69,7 +70,7 @@ export default class extends Component {
                 margin-right: 10px;
               }
               .wrapper {
-                box-shadow: 0 2px 2px 0 rgba(0,0,0,.16), 0 0 2px 0 rgba(0,0,0,.12);
+                box-shadow: 0 5px 5px 0 rgba(0,0,0,.16), 0 0 5px 0 rgba(0,0,0,.12);
                 margin-top: 20px;
                 padding: 10px;
                 text-align: left;

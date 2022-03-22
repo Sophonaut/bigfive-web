@@ -32,7 +32,7 @@ const prepareData = data =>
 const ColumnChart = ({ title, data, vAxis, chartWidth }) => (
   <Chart
     chartType='ColumnChart'
-    style={{ width: '100%' }}
+    style={{ width: '100%', paddingTop: '10px' }}
     data={[
       [{ type: 'string' }, { type: 'number' }, { role: 'style' }],
       ...prepareData(data)
@@ -76,7 +76,6 @@ export default class extends Component {
           {`
             .pick-chart {
               z-index: 99999;
-              position: absolute;
             }
             .chart {
               cursor: pointer;

@@ -5,6 +5,8 @@ import Resume from '../components/Resume'
 import { getItem } from '../lib/localStorageStore'
 import { TokenContext } from '../hooks/token'
 import http from '../config/axiosConfig'
+import { Layout } from '../components/alheimsins'
+import VanillaLayout from '../layouts/VanillaLayout'
 
 // // TODO: convert showResult to functional component
 // const getResultFromId = async id => {
@@ -162,6 +164,14 @@ const ShowResult = () => {
           </>
       }
     </>
+  )
+}
+
+ShowResult.getLayout = function getLayout (page) {
+  return (
+    <Layout>
+      <VanillaLayout>{page}</VanillaLayout>
+    </Layout>
   )
 }
 

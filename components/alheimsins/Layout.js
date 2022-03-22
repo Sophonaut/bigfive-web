@@ -3,37 +3,36 @@ import Header from './Header'
 import Footer from './Footer'
 import withI18next from '../../hoc/withI18next'
 
-const Layout = ({ user, children, t }) => (
-  <div className='container'>
-    <Head>
-      <title>YOUniverse</title>
-      <meta name='viewport' content='initial-scale=0.8, maximum-scale=0.8, width=device-width' />
-      <meta property='og:title' content='Find out who you are!' />
-      <meta property='og:description' content='Take a comprehensive personality test with updated results, custom personal feedback and compare with others' />
-      <meta property='og:image' content='/static/apple-icon-152x152.png' />
-      <meta name='theme-color' content='#000000' />
-      <meta name='twitter:card' content='summary' />
-      <meta name='twitter:creator' content='@potatodepaulo' />
-      <meta name='twitter:title' content='Find out who you are!' />
-      <meta name='twitter:description' content='Get to know yourself better from a detailed profile of your personality traits or learn to know others by comparing yourself with your partner, colleagues, friends or family.' />
-      <meta name='twitter:image' content='' />
-      <meta name='description' content='Take a comprehensive personality test - translated to multiple languages. Get to know yourself better from a detailed profile of your personality traits or learn to know others by comparing yourself with your partner, colleagues, friends or family.' />
-      <meta name='keywords' content='YOUniverse, personality traits, survey, compare' />
-      <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: '{ "@context": "http://schema.org/", "@type": "WebSite", "name": "YOUniverse Test", "url": "https://sophonaut.com" }' }} />
-      <link rel='icon' sizes='192x192' href='/static/android-icon-192x192.png' />
-      <link rel='apple-touch-icon' href='/static/apple-icon-152x152.png' />
-      <link rel='shortcut icon' href='/static/favicon.ico' />
-      <link rel='manifest' href='/static/manifest.json' />
+const Layout = ({ children, t }) => {
+  return (
+    <>
+      <Head>
+        <title>YOUniverse</title>
+        <meta name='viewport' content='initial-scale=0.8, maximum-scale=0.8, width=device-width' />
+        <meta property='og:title' content='Find out who you are!' />
+        <meta property='og:description' content='Take a comprehensive personality test with updated results, custom personal feedback and compare with others' />
+        <meta property='og:image' content='/static/apple-icon-152x152.png' />
+        <meta name='theme-color' content='#000000' />
+        <meta name='twitter:card' content='summary' />
+        <meta name='twitter:creator' content='@potatodepaulo' />
+        <meta name='twitter:title' content='Find out who you are!' />
+        <meta name='twitter:description' content='Get to know yourself better from a detailed profile of your personality traits or learn to know others by comparing yourself with your partner, colleagues, friends or family.' />
+        <meta name='twitter:image' content='' />
+        <meta name='description' content='Take a comprehensive personality test - translated to multiple languages. Get to know yourself better from a detailed profile of your personality traits or learn to know others by comparing yourself with your partner, colleagues, friends or family.' />
+        <meta name='keywords' content='YOUniverse, personality traits, survey, compare' />
+        <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: '{ "@context": "http://schema.org/", "@type": "WebSite", "name": "YOUniverse Test", "url": "https://sophonaut.com" }' }} />
+        <link rel='icon' sizes='192x192' href='/static/android-icon-192x192.png' />
+        <link rel='apple-touch-icon' href='/static/apple-icon-152x152.png' />
+        <link rel='shortcut icon' href='/static/favicon.ico' />
+        <link rel='manifest' href='/static/manifest.json' />
 
-    </Head>
-    <Header user={user} />
-    <div className='main'>
+      </Head>
+      <Header />
       {children}
-    </div>
-    <Footer />
-    <style jsx global>
-      {`
-        body {
+      <Footer />
+      <style jsx global>
+        {`
+        html,body {
           background: white;
           color: black;
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
@@ -57,34 +56,21 @@ const Layout = ({ user, children, t }) => (
           color: #909090;
           font-weight: normal;
         }
-        .container {
-          display: grid;
-          grid-template-areas:
-            "header header header"
-            "content content content"
-            "footer footer footer";
-            grid-template-columns: 1fr 2fr 1fr;
-          grid-template-rows: auto 1fr auto;
-          min-height: 100vh;
-        }
         @media screen and (max-width: 800px) {
           .container {
             grid-template-columns: 3% 1fr 3%;
           }
         }
-        .main {
-          grid-area: content;
-          height: 100%;
-          margin: 0% 5%;
-          padding: 0% 5%;
-          overflow: scroll;
-        }
-        .main a {
-          color: #bd10e0;
-        }
+        // .container {
+        //   flex-flow: column;
+        //   justify-content: center;
+        //   align-items: center;
+        //   min-height: 100%;
+        // }
       `}
-    </style>
-  </div>
-)
+      </style>
+    </>
+  )
+}
 
 export default withI18next(['common'])(Layout)
