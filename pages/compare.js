@@ -6,7 +6,7 @@ import { MdDelete } from 'react-icons/md'
 import base64url from '../lib/base64url'
 import validMongoId from '../lib/valid-mongoid'
 import formatId from '../lib/format-id'
-import AlheimsinLayout from '../layouts/VanillaLayout'
+import AlheimsinLayout from '../layouts/AlheimsinLayout'
 
 const { publicRuntimeConfig: { URL } } = getConfig()
 

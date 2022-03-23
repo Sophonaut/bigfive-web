@@ -1,6 +1,8 @@
 import { Component } from 'react'
 import Summary from './Summary'
 import { ShortcutH2, ShortcutH1 } from './alheimsins'
+import { Splide, SplideSlide } from '@splidejs/react-splide'
+import '@splidejs/splide/dist/css/splide.min.css'
 
 const Facet = ({ data }) => (
   <>
@@ -30,8 +32,18 @@ export default class extends Component {
   render () {
     const { data, chartWidth } = this.props
     return (
-      <>
-        <div>
+      <Splide
+        options={{
+          direction: 'ttb',
+          height: '85vh',
+          gap: '1rem',
+          autoWidth: true,
+          hasSliderWrapper: true
+        }}
+        style={{ paddingTop: '30px' }}
+      >
+        {/* <div className='splide__slider'> */}
+        <SplideSlide>
           <ShortcutH1 name={data.title} />
           <p><em>{data.shortDescription}</em></p>
           <p>Score: {data.score}/120 - {data.scoreText} with and average score for {data.title} of {this.cleanUpAverage(data.average)}</p>
@@ -44,13 +56,14 @@ export default class extends Component {
                 : <><span dangerouslySetInnerHTML={{ __html: data.description.substring(0, 100) }} /><span name={data.domain} onClick={this.handleReadMore} style={{ cursor: 'pointer' }}>... <a>read more</a> ({data.description.split(' ').length} words)</span></>
             }
           </p>
-        </div>
-        <div>
+        </SplideSlide>
+        <SplideSlide>
           {data && data.facets && <div className='wrapper'><Summary data={data.facets} vAxis={{ minValue: 0, maxValue: 20 }} title={data.title} chartWidth={chartWidth} /></div>}
-        </div>
-        <div>
+        </SplideSlide>
+        <SplideSlide>
           {data && data.facets && data.facets.map((facet, index) => <Facet data={facet} key={index} />)}
-        </div>
+        </SplideSlide>
+        {/* </div> */}
         <style jsx>
           {`
               span {
@@ -65,9 +78,13 @@ export default class extends Component {
                 width: 90%;
                 position: relative;
               }
-            `}
+              .vertical-splide-wrapper {
+                padding-top: 30px;
+              }
+              `}
+
         </style>
-      </>
+      </Splide>
     )
   }
 }
