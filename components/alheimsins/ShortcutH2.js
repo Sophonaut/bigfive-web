@@ -8,6 +8,9 @@ const ShortcutH2 = ({ name }) =>
     </Link>
     <style jsx>
       {`
+      h2 {
+        margin-top: 0;
+      }
       h2 a {
         color: unset;
         text-transform: capitalize;

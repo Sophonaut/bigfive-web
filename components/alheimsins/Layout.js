@@ -1,6 +1,4 @@
 import Head from 'next/head'
-import Header from './Header'
-import Footer from './Footer'
 import withI18next from '../../hoc/withI18next'
 
 const Layout = ({ children, t }) => {
@@ -27,12 +25,10 @@ const Layout = ({ children, t }) => {
         <link rel='manifest' href='/static/manifest.json' />
 
       </Head>
-      <Header />
       {children}
-      <Footer />
       <style jsx global>
         {`
-        html,body {
+        body {
           background: white;
           color: black;
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
@@ -61,12 +57,6 @@ const Layout = ({ children, t }) => {
             grid-template-columns: 3% 1fr 3%;
           }
         }
-        // .container {
-        //   flex-flow: column;
-        //   justify-content: center;
-        //   align-items: center;
-        //   min-height: 100%;
-        // }
       `}
       </style>
     </>

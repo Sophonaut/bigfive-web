@@ -56,8 +56,8 @@ const Header = ({ info }) => {
               justify-self: center;
               background: white;
               padding: 25px 0;
-              max-width: 100vw;
-              width: 100vw;
+              max-width: 100%;
+              width: 100%;
             }
 
             .nav-info {
@@ -70,7 +70,6 @@ const Header = ({ info }) => {
               flex-flow: row;
               justify-content: space-between;
               align-items: baseline;
-              // padding: 0 30px;
               width: 100%;
               min-width: 100%;
               max-width: 100%;

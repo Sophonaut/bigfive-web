@@ -1,28 +1,20 @@
+import Header from '../components/alheimsins/Header'
+import Footer from '../components/alheimsins/Footer'
 // const util = require('util')
 // console.log(`analyzing request: ${util.inspect(req)}`)
 
 export default function VanillaLayout ({ children }) {
   // console.log(`in VanillaLayout, observing children: ${util.inspect(children)}`)
   return (
-    <div className='container'>
+    <div className='layout-container'>
+      <Header />
       <div className='main'>
         {children}
       </div>
+      <Footer />
       <style jsx global>
         {`
-        .container {
-          display: flex;
-          flex-flow: column;
-          justify-content: flex-start;
-          align-items: center;
-          height: 94%;
-          // padding: 0 10%;
-          padding: 0% 5% 0;
-          overflow: scroll;
-          resize: both;
-        }
-
-        .container {
+        .layout-container {
           // display: grid;
           // grid-template-areas:
             // "header header header"
@@ -30,6 +22,7 @@ export default function VanillaLayout ({ children }) {
             // "footer footer footer";
             // grid-template-columns: 1fr 2fr 1fr;
           // grid-template-rows: auto 1fr auto;
+          height: 100%;
           min-height: 100vh;
         }
         @media screen and (max-width: 800px) {
@@ -43,11 +36,12 @@ export default function VanillaLayout ({ children }) {
           // justify-content: center;
           // align-items: space-between;
           // grid-area: content;
-          height: 100%;
           // margin: 0% 5%;
           // padding: 0% 5%;
           // overflow: scroll;
-          width: 100%;
+          height: 100%;
+          width: 80%;
+          margin: auto;
         }
         .main a {
           color: #bd10e0;

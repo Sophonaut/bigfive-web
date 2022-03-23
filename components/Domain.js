@@ -1,9 +1,6 @@
 import { Component } from 'react'
 import Summary from './Summary'
 import { ShortcutH2, ShortcutH1 } from './alheimsins'
-import { Pagination } from 'swiper'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import 'swiper/swiper-bundle.css'
 
 const Facet = ({ data }) => (
   <>
@@ -34,38 +31,28 @@ export default class extends Component {
     const { data, chartWidth } = this.props
     return (
       <>
-        <Swiper
-          autoHeight
-          className='domain-swiper'
-          direction='vertical'
-          loopFillGroupWithBlank
-          modules={[Pagination]}
-          pagination
-          slidesPerView={1}
-          spaceBetween={0}
-        >
-          <SwiperSlide key={data.title} className='domain-wrapper'>
-            <ShortcutH1 name={data.title} />
-            <p><em>{data.shortDescription}</em></p>
-            <p>Score: {data.score}/120 - {data.scoreText} with and average score for {data.title} of {this.cleanUpAverage(data.average)}</p>
-            <p>You are express {data.title} more than {data.percentile[0]} percent of the population</p>
-            <p><strong>{data.text}</strong></p>
-            <p>
-              {
-                this.state[data.domain]
-                  ? <><span dangerouslySetInnerHTML={{ __html: data.description }} /><br /><br /><span name={data.domain} onClick={this.handleReadMore} style={{ cursor: 'pointer' }}><a>read less</a></span></>
-                  : <><span dangerouslySetInnerHTML={{ __html: data.description.substring(0, 100) }} /><span name={data.domain} onClick={this.handleReadMore} style={{ cursor: 'pointer' }}>... <a>read more</a> ({data.description.split(' ').length} words)</span></>
-              }
-            </p>
-          </SwiperSlide>
-          <SwiperSlide key={`${data.title}-chart`} className='domain-slide'>
-            {data && data.facets && <div className='wrapper'><Summary data={data.facets} vAxis={{ minValue: 0, maxValue: 20 }} title={data.title} chartWidth={chartWidth} /></div>}
-          </SwiperSlide>
-          <SwiperSlide key={`${data.title}-facets`}>
-            {data && data.facets && data.facets.map((facet, index) => <Facet data={facet} key={index} />)}
-          </SwiperSlide>
-          <style jsx>
-            {`
+        <div>
+          <ShortcutH1 name={data.title} />
+          <p><em>{data.shortDescription}</em></p>
+          <p>Score: {data.score}/120 - {data.scoreText} with and average score for {data.title} of {this.cleanUpAverage(data.average)}</p>
+          <p>You are express {data.title} more than {data.percentile[0]} percent of the population</p>
+          <p><strong>{data.text}</strong></p>
+          <p>
+            {
+              this.state[data.domain]
+                ? <><span dangerouslySetInnerHTML={{ __html: data.description }} /><br /><br /><span name={data.domain} onClick={this.handleReadMore} style={{ cursor: 'pointer' }}><a>read less</a></span></>
+                : <><span dangerouslySetInnerHTML={{ __html: data.description.substring(0, 100) }} /><span name={data.domain} onClick={this.handleReadMore} style={{ cursor: 'pointer' }}>... <a>read more</a> ({data.description.split(' ').length} words)</span></>
+            }
+          </p>
+        </div>
+        <div>
+          {data && data.facets && <div className='wrapper'><Summary data={data.facets} vAxis={{ minValue: 0, maxValue: 20 }} title={data.title} chartWidth={chartWidth} /></div>}
+        </div>
+        <div>
+          {data && data.facets && data.facets.map((facet, index) => <Facet data={facet} key={index} />)}
+        </div>
+        <style jsx>
+          {`
               span {
                 margin-right: 10px;
               }
@@ -79,8 +66,7 @@ export default class extends Component {
                 position: relative;
               }
             `}
-          </style>
-        </Swiper>
+        </style>
       </>
     )
   }

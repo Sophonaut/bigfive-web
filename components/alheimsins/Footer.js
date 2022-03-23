@@ -58,8 +58,7 @@ const Footer = () =>
         color: white;
       }
       footer {
-        // grid-area: footer;
-        position: absolute;
+        grid-area: footer;
         width: 100%;
         background: black;
         color: #666;

@@ -8,13 +8,13 @@ const startTest = e => {
   Router.pushRoute('/test/')
 }
 
-const Home = () => {
+export default function Home () {
   return (
     <div>
       <div style={{ paddingBottom: '20px', borderBottom: '1px solid rgb(234, 234, 234)' }}>
         <h1>YOUniverse: Big Five Personality Quiz</h1>
       </div>
-      <div style={{ textAlign: 'left', margin: 'auto', fontSize: '14px', width: '100%' }}>
+      <div style={{ textAlign: 'left', fontSize: '14px' }}>
         <form onSubmit={startTest}>
           <p>PLEASE READ ALL OF THE INSTRUCTIONS BEFORE TAKING THE TEST. This will ensure you get the greatest value from it possible.</p>
           <p>The goal of this test isn’t to make you feel good, or only highlight your best qualities so you leave feeling positive about your unique way of shining in this world. If you reply honestly and that is the result, that is wonderful. However, the goal of this test is to allow you to see yourself as you truly are so that you have solid footing upon which to leverage your existing strengths and knowledge of your vulnerabilities so you can improve upon them if desired. </p>
@@ -53,4 +53,4 @@ Home.getLayout = function getLayout (page) {
   )
 }
 
-export default Home
+// export default Home
