@@ -22,11 +22,6 @@ export default function AlheimsinLayout ({ children }) {
           height: 100%;
           min-height: 100vh;
         }
-        @media screen and (max-width: 800px) {
-          .container {
-            grid-template-columns: 3% 1fr 3%;
-          }
-        }
         .main {
           grid-area: content;
           width: 80%;
@@ -36,6 +31,16 @@ export default function AlheimsinLayout ({ children }) {
         }
         .main a {
           color: #bd10e0;
+        }
+
+        @media screen and (max-width: 800px) {
+          .container {
+            // grid-template-columns: 3% 1fr 3%;
+          }
+          .main {
+            width: 100%;
+            overflow: scroll;
+          }
         }
       `}
       </style>

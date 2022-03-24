@@ -64,7 +64,7 @@ export default class extends Component {
   render () {
     const { chart } = this.state
     return (
-      <>
+      <div className='chart-container'>
         <div className='pick-chart'>
           <span onClick={() => this.setState({ chart: 'RadarChart' })} className={chart === 'RadarChart' ? 'chart selected' : 'chart'}>Radar</span>
           <span onClick={() => this.setState({ chart: 'ColumnChart' })} className={chart === 'ColumnChart' ? 'chart selected' : 'chart'}>Column</span>
@@ -87,9 +87,28 @@ export default class extends Component {
               background-color: rgb(230, 230, 230);
               border-radius: 10px;
             } 
+
+            @media (max-width: 800px), screen and (orientation: landscape) {
+              .chart-container {
+                width: 50%;
+                min-width: 300px;
+                height: 100%;
+                padding: 0;
+              }
+            }
+
+            @media (max-width: 800px), screen and (orientation: portrait) {
+              .chart-container {
+                width: 98vw;
+                min-width: 300px;
+                margin-right: 10px;
+                padding-right: 10px;
+
+              }
+            }
           `}
         </style>
-      </>
+      </div>
     )
   }
 }

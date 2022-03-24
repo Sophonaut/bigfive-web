@@ -20,6 +20,9 @@ export default function VanillaLayout ({ children }) {
           .container {
             grid-template-columns: 3% 1fr 3%;
           }
+          .main {
+            width: 95%;
+          }
         }
         .main {
           height: 100%;
