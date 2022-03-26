@@ -4,9 +4,12 @@ import getConfig from 'next/config'
 import Summary from '../components/SummaryCompare'
 // import Summary from '../components/Summary'
 import SocialShare from '../components/SocialShare'
-import { ShortcutH1 } from '../components/alheimsins'
+import { ShortcutH1, Layout } from '../components/alheimsins'
 import repackResults from '../lib/repack-results'
 import base64url from '../lib/base64url'
+
+import AlheimsinLayout from '../layouts/AlheimsinLayout'
+
 const { publicRuntimeConfig: { URL } } = getConfig()
 
 const httpInstance = axios.create({
@@ -46,7 +49,15 @@ const Comparison = ({ data, chartWidth }) => {
   )
 }
 
-export default class extends Component {
+Comparison.getLayout = function getLayout (page) {
+  return (
+    <Layout>
+      <AlheimsinLayout>{page}</AlheimsinLayout>
+    </Layout>
+  )
+}
+
+export default class showCompare extends Component {
   static async getInitialProps ({ query }) {
     if (query.id) {
       const comparison = await getCompareFromId(query.id)

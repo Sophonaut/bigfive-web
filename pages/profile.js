@@ -6,6 +6,8 @@ import Settings from '../components/Settings'
 import { getItem } from '../lib/localStorageStore'
 import { getResultFromUser } from '../lib/fetch-result'
 import { TokenContext } from '../hooks/token'
+import { Layout } from '../components/alheimsins'
+import AlheimsinLayout from '../layouts/AlheimsinLayout'
 
 const Profile = ({ props }) => {
   const { token, setToken } = useContext(TokenContext)
@@ -76,6 +78,14 @@ const Profile = ({ props }) => {
         </style>
       </div>
     </>
+  )
+}
+
+Profile.getLayout = function getLayout (page) {
+  return (
+    <Layout>
+      <AlheimsinLayout>{page}</AlheimsinLayout>
+    </Layout>
   )
 }
 
