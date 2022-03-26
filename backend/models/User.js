@@ -9,7 +9,20 @@ const UserSchema = new Schema({
   paid: { type: Boolean, required: false },
   salt: { type: String, required: true },
   hash: { type: String, required: true },
-  results: { type: Array, required: false }
+  results: { type: Array, required: false },
+  // Invitations could be the ID of the reference to manage the relationship between two users
+  invitations: { type: Array, required: false },
+  /*
+    Whitelist should be the list of users that have accepted the invitation this user made
+    OR the list of users this user has accepted invitation from
+
+    In either case, the whitelist should contain email or objectId of the user so we can do a lookup
+    on their most recent results at the time of comparison request
+
+    It probably also makes sense to update the model with latestResult and allow an easy lookup
+    for the result rather than performing this operation solely on the user model arrayto
+  */
+  whitelist: { type: Array, required: false }
 }, { timestamps: true })
 
 UserSchema.methods.validPassword = function (password) {
@@ -40,8 +53,6 @@ UserSchema.methods.toAuthJSON = (user) => {
     token: user.generateJWT()
   }
 }
-
-// UserSchema.methods.updateResults = function (results) {}
 
 UserSchema.plugin(uniqueValidator, { message: 'is already taken.' })
 

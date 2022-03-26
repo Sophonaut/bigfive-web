@@ -54,7 +54,7 @@ router.post('/users/login', (req, res, next) => {
 
 // GET api/user verify a specific user is logged in
 router.get('/user', auth.required, (req, res, next) => {
-  User.findById(req.payload.id).then((user) => {
+  User.findById(req.payload.id).exec().then((user) => {
     if (!user) { return res.sendStatus(401) }
 
     return res.json({ user: user.toAuthJSON() })
@@ -68,12 +68,14 @@ router.get('/user/:token', (req, res) => {
 
   // check to see if request is looking for particular user result, otherwise return most recently pushed
   const userResultsIndex = req.params.index || -1
-  User.findOne({ _id: mongo.ObjectId(userId) }).then((user) => {
-    if (!user) { return res.sendStatus(401) }
+  User.findOne({ _id: mongo.ObjectId(userId) })
+    .exec()
+    .then(user => {
+      if (!user) { return res.sendStatus(401) }
 
-    // TODO: support lookup keys for returning historic results
-    return res.json({ result: user.results.slice(userResultsIndex).pop() })
-  })
+      // TODO: support lookup keys for returning historic results
+      return res.json({ result: user.results.slice(userResultsIndex).pop() })
+    })
 })
 
 // PUT api/user update password and or email

@@ -1,8 +1,11 @@
 import { useContext, useEffect, useState, useRef } from 'react'
+import calculateScore from 'bigfive-calculate-score'
+import getResult from '@sophonaut/b5-result-text'
 import Resume from '../components/Resume'
 import { getItem } from '../lib/localStorageStore'
-import { TokenContext } from '../hooks/token'
 import { getResultFromUser } from '../lib/fetch-result'
+import { TokenContext } from '../hooks/token'
+import http from '../config/axiosConfig'
 
 const ShowResult = () => {
   const { token, setToken } = useContext(TokenContext)
@@ -17,34 +20,30 @@ const ShowResult = () => {
       setToken(JSON.parse(getItem('currentUser')).token)
     }
   }
+  
+  const fetchData = async () => {
+    if (isMounted) {
+      const ret = await getResultFromUser(token)
+      setResults(ret)
+    }
+  }
 
   const getWidth = () => {
     setChartWidth(window.innerWidth * 0.85)
   }
 
   useEffect(() => {
-    isMounted = true
-    const fetchData = async () => {
-      if (!token) {
-        setToken(JSON.parse(getItem('currentUser')).token)
-      }
-
-      if (isMounted) {
-        const ret = await getResultFromUser(token)
-        setResults(ret)
-      }
-    }
-
     checkToken()
       .then(fetchData())
-      .then(setLoading(false))
-    window.addEventListener('resize', getWidth)
-
+      .then(() => {
+        isMounted = true
+        setLoading(false)
+      })
+   
     return () => {
       isMounted = false
-      window.removeEventListener('resize', getWidth)
     }
-  }, [loading, results.length])
+  }, [])
 
   useEffect(() => {
     window.addEventListener('resize', getWidth)

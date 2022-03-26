@@ -22,8 +22,10 @@ const handler = routes.getRequestHandler(app)
 const port = parseInt(process.env.PORT, 10) || 3000
 const express = require('express')
 require('./models/User')
+require('./models/Invitation')
 require('./shared/passport')
 const userRoutes = require('./routes/users')
+const invitationRoutes = require('./routes/invitations')
 const stripeRoutes = require('./routes/stripe')
 
 i18n
@@ -105,15 +107,15 @@ i18n
           const userId = JSON.parse(Buffer.from(token[1], 'base64').toString('ascii')).id
 
           if (userId) {
-            const user = User.findOne({ _id: mongo.ObjectId(userId) }, (err) => {
-              if (err) { throw err }
-              if (!user) { return res.sendStatus(401) }
-            }).then((user) => {
-              user.results.push(req.body.result)
-              user.save((err) => {
-                if (err) throw err
+            User.findOne({ _id: mongo.ObjectId(userId) })
+              .exec()
+              .then((user) => {
+                user.results.push(req.body.result)
+                user.save((err) => {
+                  if (err) throw err
+                })
               })
-            })
+              .catch(err => { throw new Error(err) })
           }
 
           const payload = req.body.result
@@ -125,6 +127,9 @@ i18n
 
         // api/users routes mounted
         server.use('/api/', userRoutes)
+
+        // api/invitations routes mounted
+        server.use('/api/', invitationRoutes)
 
         // api/stripe routes mounted
         server.use('/api/', stripeRoutes)

@@ -86,7 +86,7 @@ export default class extends Component {
             .selected {
               background-color: rgb(230, 230, 230);
               border-radius: 10px;
-            }
+            } 
           `}
         </style>
       </>

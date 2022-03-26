@@ -5,6 +5,7 @@ import { Field, Button, InputText } from '../components/alheimsins'
 import getConfig from 'next/config'
 import axios from 'axios'
 import { authenticationService } from '../lib/auth.service'
+import { useToken } from '../hooks/token'
 
 const { publicRuntimeConfig } = getConfig()
 const http = axios.create({
@@ -18,6 +19,7 @@ const SignUp = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loggingIn, setLoggingIn] = useState(true)
+  const { setToken } = useToken()
 
   useEffect(() => {
     if (queryString && !!queryString.session_id) {
@@ -33,6 +35,7 @@ const SignUp = () => {
       .then(res => {
         console.log(res)
         authenticationService.login(res.data.user)
+        setToken(res.data.user.token)
         Router.pushRoute('/test-prep')
       })
       .catch(err => {
@@ -42,18 +45,22 @@ const SignUp = () => {
   }
 
   // TODO: Create vs login
-  const handleLogin = e => {
+  const handleLogin = async e => {
     const userData = { user: { email, password } }
-    http.post('/api/users/login', userData)
-      .then(res => {
-        console.log(res)
-        authenticationService.login(res.data.user)
-        Router.pushRoute('/result')
-      })
-      .catch(err => {
-        console.log(err)
-        console.log(err.response)
-      })
+    const res = await http.post('/api/users/login', userData)
+    authenticationService.login(res.data.user)
+    setToken(res.data.user.token)
+    Router.pushRoute('/result')
+    // http.post('/api/users/login', userData)
+    //   .then(res => {
+    //     authenticationService.login(res.data.user)
+    //     setToken(res.data.user.token)
+    //     Router.pushRoute('/result')
+    //   })
+    //   .catch(err => {
+    //     console.log(err)
+    //     console.log(err.response)
+    //   })
   }
   // TODO: Add error handling
 
