@@ -22,7 +22,7 @@ const MyApp = ({ Component, pageProps }) => {
   )
 }
 
-MyApp.getInitialProps = async ({ Component, ctx, ctx: { query, req } }) => {
+MyApp.getInitialProps = async ({ Component, router, ctx, ctx: { query, req } }) => {
   let componentProps = {}
   const path = req && req.url ? req.url : false
   const countryCode = req && req.requestCountryCode ? req.requestCountryCode.toLowerCase() : 'en'

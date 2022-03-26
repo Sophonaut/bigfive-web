@@ -20,9 +20,11 @@ const ShowResult = () => {
     }
   }
 
+
   const getWidth = () => {
     setChartWidth(window.innerWidth * 0.85)
   }
+
 
   const fetchData = async () => {
     if (isMounted) {
@@ -57,15 +59,7 @@ const ShowResult = () => {
   return (
     <>
       <h2>Result</h2>
-      {/* {
-        results && */}
-      <>
-        {/* <SocialShare url={currentUrl} /> */}
-        {/* {id && <>Save the following ID to see the results later or compare yourself to others - <Code>{id}</Code></>} */}
         <Resume data={results} chartWidth={chartWidth} />
-        {/* <SocialShare url={currentUrl} /> */}
-      </>
-      {/* } */}
     </>
   )
 }
