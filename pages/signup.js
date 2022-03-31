@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { Router } from '../routes'
 import { useRouter } from 'next/router'
-import { Field, Button, InputText } from '../components/alheimsins'
+import { Field, Button, InputText, Layout } from '../components/alheimsins'
 import getConfig from 'next/config'
 import axios from 'axios'
 import { authenticationService } from '../lib/auth.service'
 import { useToken } from '../hooks/token'
+
+import AlheimsinLayout from '../layouts/VanillaLayout'
 
 const { publicRuntimeConfig } = getConfig()
 const http = axios.create({
@@ -95,6 +97,14 @@ const SignUp = () => {
 
       </form>
     </div>
+  )
+}
+
+SignUp.getLayout = function getLayout (page) {
+  return (
+    <Layout>
+      <AlheimsinLayout>{page}</AlheimsinLayout>
+    </Layout>
   )
 }
 

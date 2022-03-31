@@ -1,10 +1,12 @@
 import { Component } from 'react'
 import { Router } from '../routes'
 import LanguageBar from '../components/LanguageBar'
-import { Button, ProgressBar, RadioGroup, Radio } from '../components/alheimsins'
+import { Button, ProgressBar, RadioGroup, Radio, Layout } from '../components/alheimsins'
 import http from '../config/axiosConfig'
 import { FaInfoCircle } from 'react-icons/fa'
 import { populateData, restoreData, getProgress, clearItems, setItem, getItem } from '../lib/localStorageStore'
+
+import AlheimsinLayout from '../layouts/AlheimsinLayout'
 
 const { getItems: getInventory, getInfo } = require('@alheimsins/b5-johnson-120-ipip-neo-pi-r')
 const getItems = require('../lib/get-items')
@@ -144,57 +146,64 @@ export default class extends Component {
     const done = progress === 100 && next
     const { handleChange, handleSubmit, handleBack, switchLanguage } = this
     return (
-      <div style={{ textAlign: 'left' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <LanguageBar switchLanguage={switchLanguage} selectedLanguage={lang} />
-        </div>
-        <ProgressBar progress={progress} />
-        {
-          restore && <p onClick={this.handleClearAnswers} style={{ color: '#FF6E14', marginTop: '10px', cursor: 'pointer' }}><FaInfoCircle /> Your state is restored from LocalStorage. Click here to start over again.</p>
-        }
-        {items.map(item =>
-          <div key={item.id} className={lang === 'ur' ? 'item inverted-text' : 'item'}>
-            <div className='question'>
-              {item.text}
+      <Layout>
+        <AlheimsinLayout>
+          <div className='test-container' style={{ textAlign: 'left' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <LanguageBar switchLanguage={switchLanguage} selectedLanguage={lang} />
             </div>
-            <RadioGroup name={item.id} onChange={handleChange} checked={answers[item.id] && answers[item.id].score}>
-              {item.choices.map(choice =>
-                <Radio key={item.id + choice.score} value={choice.score} color='5' text={choice.text} style={{ display: 'block' }} />
-              )}
-            </RadioGroup>
+            <ProgressBar progress={progress} />
+            {
+              restore && <p onClick={this.handleClearAnswers} style={{ color: '#FF6E14', marginTop: '10px', cursor: 'pointer' }}><FaInfoCircle /> Your state is restored from LocalStorage. Click here to start over again.</p>
+            }
+            {items.map(item =>
+              <div key={item.id} className={lang === 'ur' ? 'item inverted-text' : 'item'}>
+                <div className='question'>
+                  {item.text}
+                </div>
+                <RadioGroup name={item.id} onChange={handleChange} checked={answers[item.id] && answers[item.id].score}>
+                  {item.choices.map(choice =>
+                    <Radio key={item.id + choice.score} value={choice.score} color='5' text={choice.text} style={{ display: 'block' }} />
+                  )}
+                </RadioGroup>
+              </div>
+            )}
+            <div className='navigation'>
+              <div style={{ marginRight: '10px' }}>
+                <Button type='submit' value='Back' onClick={handleBack} disabled={!previous} />
+              </div>
+              <div>
+                <Button type='submit' value={done ? 'See results' : 'Next'} onClick={handleSubmit} background={done ? '#FF0080' : 'black'} border={done ? '1px solid #FF0080' : '1px solid black'} disabled={!next} />
+              </div>
+            </div>
+            <style jsx>
+              {`
+                .test-container {
+                  padding-top: 1%;
+                }
+                .item {
+                  margin-top: 30px;
+                }
+                .navigation {
+                  margin-top: 30px;
+                  display: inline-flex;
+                }
+                .question {
+                  font-size: 28px;
+                  margin-bottom: 2px;
+                }
+                .inverted-text {
+                  -moz-transform: scale(-1, 1);
+                  -webkit-transform: scale(-1, 1);
+                  -o-transform: scale(-1, 1);
+                  -ms-transform: scale(-1, 1);
+                  transform: scale(-1, 1);
+                }
+              `}
+            </style>
           </div>
-        )}
-        <div className='navigation'>
-          <div style={{ marginRight: '10px' }}>
-            <Button type='submit' value='Back' onClick={handleBack} disabled={!previous} />
-          </div>
-          <div>
-            <Button type='submit' value={done ? 'See results' : 'Next'} onClick={handleSubmit} background={done ? '#FF0080' : 'black'} border={done ? '1px solid #FF0080' : '1px solid black'} disabled={!next} />
-          </div>
-        </div>
-        <style jsx>
-          {`
-            .item {
-              margin-top: 30px;
-            }
-            .navigation {
-              margin-top: 30px;
-              display: inline-flex;
-            }
-            .question {
-              font-size: 28px;
-              margin-bottom: 2px;
-            }
-            .inverted-text {
-              -moz-transform: scale(-1, 1);
-              -webkit-transform: scale(-1, 1);
-              -o-transform: scale(-1, 1);
-              -ms-transform: scale(-1, 1);
-              transform: scale(-1, 1);
-            }
-          `}
-        </style>
-      </div>
+        </AlheimsinLayout>
+      </Layout>
     )
   }
 }

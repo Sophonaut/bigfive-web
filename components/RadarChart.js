@@ -23,7 +23,13 @@ const options = {
       beginAtZero: true,
       max: 1
     }
-  }
+  },
+  layout: {
+    padding: {
+      left: 10
+    }
+  },
+  maintainAspectRatio: true
 }
 // const data = {
 //   labels: [

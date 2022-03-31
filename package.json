@@ -50,6 +50,7 @@
     "@alheimsins/b5-johnson-120-ipip-neo-pi-r": "Sophonaut/b5-johnson-120-ipip-neo-pi-r#main",
     "@alheimsins/react-google-charts": "1.6.5",
     "@sophonaut/b5-result-text": "Sophonaut/b5-result-text",
+    "@splidejs/react-splide": "^0.6.20",
     "@stripe/stripe-js": "^1.15.0",
     "axios": "^0.21.1",
     "babel-eslint": "10.1.0",
@@ -94,6 +95,7 @@
     "request-country": "0.1.5",
     "rxjs": "^6.6.7",
     "stripe": "^8.154.0",
+    "swiper": "^6.8.4",
     "test-listen": "^1.1.0"
   },
   "devDependencies": {

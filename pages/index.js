@@ -1,28 +1,20 @@
 import { Router } from '../routes'
-import { Select, Button, Field } from '../components/alheimsins'
+import { Button, Layout } from '../components/alheimsins'
 
-import ISO6391 from 'iso-639-1'
-import { getInfo } from '@alheimsins/b5-johnson-120-ipip-neo-pi-r'
-import withI18next from '../hoc/withI18next'
-
-const { languages } = getInfo()
-const langCodes = languages.map(lang => lang.id)
-const languageList = langCodes.map(code => ({ code, name: ISO6391.getName(code) }))
+import AlheimsinLayout from '../layouts/AlheimsinLayout'
 
 const startTest = e => {
   e.preventDefault()
-  const lang = e.target.languages.value
-  Router.pushRoute(`/test/${lang}`)
+  Router.pushRoute('/test/')
 }
 
-const Home = ({ countryCode, t }) => {
-  const defaultLanguage = langCodes.includes(countryCode) ? countryCode : 'en'
+export default function Home () {
   return (
     <div>
       <div style={{ paddingBottom: '20px', borderBottom: '1px solid rgb(234, 234, 234)' }}>
         <h1>YOUniverse: Big Five Personality Quiz</h1>
       </div>
-      <div style={{ textAlign: 'left', margin: 'auto', fontSize: '14px', width: '100%' }}>
+      <div style={{ textAlign: 'left', fontSize: '14px' }}>
         <form onSubmit={startTest}>
           <p>PLEASE READ ALL OF THE INSTRUCTIONS BEFORE TAKING THE TEST. This will ensure you get the greatest value from it possible.</p>
           <p>The goal of this test isn’t to make you feel good, or only highlight your best qualities so you leave feeling positive about your unique way of shining in this world. If you reply honestly and that is the result, that is wonderful. However, the goal of this test is to allow you to see yourself as you truly are so that you have solid footing upon which to leverage your existing strengths and knowledge of your vulnerabilities so you can improve upon them if desired. </p>
@@ -44,10 +36,6 @@ const Home = ({ countryCode, t }) => {
               I agree to the Terms of Service
             </label>
           </p>
-          <p>{t('home:paragraphs:select_language')}</p>
-          <Field name={t('common:language')}>
-            <Select name='languages' defaultValue={defaultLanguage} options={languageList} />
-          </Field>
           <div style={{ textAlign: 'center', paddingTop: '20px' }}>
             <Button value='Start Test' type='submit' background='rgb(255, 0, 128)' border='1px solid rgb(255, 0, 128)' />
           </div>
@@ -57,4 +45,12 @@ const Home = ({ countryCode, t }) => {
   )
 }
 
-export default withI18next(['home', 'common'])(Home)
+Home.getLayout = function getLayout (page) {
+  return (
+    <Layout>
+      <AlheimsinLayout>{page}</AlheimsinLayout>
+    </Layout>
+  )
+}
+
+// export default Home
