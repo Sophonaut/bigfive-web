@@ -1,14 +1,15 @@
-import { Layout } from '../components/alheimsins'
+// import { Layout } from '../components/alheimsins'
 import React, { useState, useEffect } from 'react'
 import { Router } from '../routes'
 import * as gtag from '../lib/gtag'
 import { authenticationService } from '../lib/auth.service'
 import { TokenProvider } from '../hooks/token'
+import { UserProvider } from '../hooks/user'
 
 Router.onRouteChangeComplete = url => gtag.pageview(url)
 
 const MyApp = ({ Component, pageProps }) => {
-  const [currentUser, setCurrentUser] = useState()
+  const [setCurrentUser] = useState()
 
   useEffect(() => {
     authenticationService.currentUser.subscribe(user => setCurrentUser(user))
@@ -16,9 +17,11 @@ const MyApp = ({ Component, pageProps }) => {
 
   return (
     <TokenProvider>
-      <Layout user={currentUser}>
+      {/* <Layout user={currentUser}> */}
+      <UserProvider>
         <Component {...pageProps} />
-      </Layout>
+      </UserProvider>
+      {/* </Layout> */}
     </TokenProvider>
   )
 }

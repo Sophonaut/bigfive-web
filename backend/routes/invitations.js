@@ -1,8 +1,8 @@
-const { model } = require('mongoose')
+import { getInvitation, getUserById, getUserByEmail } from '../../lib/invitation-helpers'
+import mongoose from 'mongoose'
+const Invitation = mongoose.model('Invitation')
+
 const router = require('express').Router()
-const mongo = require('mongojs')
-const User = model('User')
-const Invitation = model('Invitation')
 
 // const util = require('util')
 // console.log(`analyzing request: ${util.inspect(req)}`)
@@ -28,20 +28,12 @@ router.post('/invitations', async (req, res, next) => {
   console.log(`currentUserId check: ${currentUserId}`)
 
   // pull invitee information based on email provided by user
-  try {
-    invitee = await User.findOne({ email: invitee }).exec()
-  } catch (err) {
-    console.log(err.stack)
-  }
+  invitee = getUserByEmail(invitee)
   if (!invitee) { return res.status(400).json({ success: false, message: 'Unable to find user' }) }
   if (invitee._id.toString() === currentUserId) { return res.status(400).json({ success: false, message: 'Unable to share results with self!' }) }
 
   // pull user inviting another based on token stored in context
-  try {
-    user = await User.findOne({ _id: mongo.ObjectId(currentUserId) }).exec()
-  } catch (err) {
-    console.log(err.stack)
-  }
+  user = getUserById(currentUserId)
   if (!user) { return res.status(400).json({ success: false, message: "We weren't able to send this invitation...are you logged in?" }) }
 
   console.log(`checking invitee's invitations queue: ${JSON.stringify(invitee.invitations)}`)
@@ -84,11 +76,7 @@ router.get('/invitations/:token', async (req, res) => {
   let user = {}
   const currentUserId = tokenCheck(req)
 
-  try {
-    user = await User.findOne({ _id: mongo.ObjectId(currentUserId) }).exec()
-  } catch (err) {
-    console.log(err.stack)
-  }
+  user = getUserById(currentUserId)
   if (!user) { return res.status(400).json({ success: false, message: "We weren't able to retrieve your invitations...are you logged in?" }) }
 
   return res.json({ invitations: user.invitations })
@@ -100,46 +88,43 @@ router.get('/invitations/:token', async (req, res) => {
 */
 
 router.put('/invitations', async (req, res, next) => {
-  let invitee = {}
-  let createdBy = {}
-  let invitation = req.body._id
-  try {
-    invitation = await Invitation.findOne({ _id: mongo.ObjectId(invitation) }).exec()
-  } catch (err) {
-    console.log(err.stack)
-  }
+  let invitee = ''
+  let createdBy = ''
+  let invitation = ''
+  const inviteId = req.body._id
+
+  invitation = getInvitation(inviteId)
   if (!invitation) { return res.status(400).json({ success: false, message: "We weren't able to update this invitation." }) }
 
+  // TODO: handle case where old invitation exists and user has declined previous invitation but receives another one?
+
   // update invitation object for recording response
-  if (req.body.selection) invitation.accepted = req.body.selection
+  if (req.body.selection) {
+    invitation.accepted = req.body.selection
+    await invitation.save()
+  }
 
   // if true
   // update invitee whitelist and invitation queue
-  try {
-    invitee = await User.findOne({ _id: mongo.ObjectId(invitation.invitee.get('_id')) }).exec()
-  } catch (err) {
-    console.log(err.stack)
+  invitee = getUserById(invitation.invitee.get('_id'))
+
+  if (req.body.selection) {
+    invitee.whitelist.push(invitation.createdBy)
   }
 
-  invitee.whitelist.push(invitation.createdBy)
-  invitee.invitations = invitee.invitations.filter(invite => invite._id.toString() !== req.body._id)
+  invitee.invitations = invitee.invitations.filter(invite => invite._id.toString() !== inviteId)
+  await invitee.save()
 
   // update createdBy whitelist
-  try {
-    createdBy = await User.findOne({ _id: mongo.ObjectId(invitation.createdBy.get('_id')) }).exec()
-  } catch (err) {
-    console.log(err.stack)
+  if (req.body.selection) {
+    createdBy = getUserById(invitation.createdBy.get('_id'))
+    createdBy.whitelist.push(invitation.invitee)
+    await createdBy.save()
   }
-
-  createdBy.whitelist.push(invitation.invitee)
-
-  await invitation.save()
-  await invitee.save()
-  await createdBy.save()
 
   return res.json({ success: true, message: 'Invitation accepted and results shared successfully!' })
 
-  // TODO: if false         <== should this be DELETE instead?
+  // TODO: the delete function should actually go in invitation update
 })
 
 module.exports = router

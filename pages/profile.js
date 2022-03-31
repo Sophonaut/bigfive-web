@@ -6,8 +6,10 @@ import Settings from '../components/Settings'
 import { getItem } from '../lib/localStorageStore'
 import { getResultFromUser } from '../lib/fetch-result'
 import { TokenContext } from '../hooks/token'
+import { UserContext } from '../hooks/user'
 
 const Profile = ({ props }) => {
+  const { user, setUser } = useContext(UserContext)
   const { token, setToken } = useContext(TokenContext)
   const [results, setResults] = useState([])
   const [chartWidth, setChartWidth] = useState(600)
@@ -24,7 +26,7 @@ const Profile = ({ props }) => {
 
   const fetchData = async () => {
     if (isMounted) {
-      const ret = await getResultFromUser(token)
+      const ret = await getResultFromUser(token, user, setUser)
       setResults(ret)
     }
   }

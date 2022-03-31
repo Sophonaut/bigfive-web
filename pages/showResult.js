@@ -1,13 +1,15 @@
 import { useContext, useEffect, useState, useRef } from 'react'
-import calculateScore from 'bigfive-calculate-score'
-import getResult from '@sophonaut/b5-result-text'
+// import calculateScore from 'bigfive-calculate-score'
+// import getResult from '@sophonaut/b5-result-text'
 import Resume from '../components/Resume'
 import { getItem } from '../lib/localStorageStore'
 import { getResultFromUser } from '../lib/fetch-result'
 import { TokenContext } from '../hooks/token'
-import http from '../config/axiosConfig'
+import { UserContext } from '../hooks/user'
+// import http from '../config/axiosConfig'
 
 const ShowResult = () => {
+  const { user, setUser } = useContext(UserContext)
   const { token, setToken } = useContext(TokenContext)
   const [chartWidth, setChartWidth] = useState(600)
   const [results, setResults] = useState([])
@@ -20,10 +22,10 @@ const ShowResult = () => {
       setToken(JSON.parse(getItem('currentUser')).token)
     }
   }
-  
+
   const fetchData = async () => {
     if (isMounted) {
-      const ret = await getResultFromUser(token)
+      const ret = await getResultFromUser(token, user, setUser)
       setResults(ret)
     }
   }
@@ -39,7 +41,7 @@ const ShowResult = () => {
         isMounted = true
         setLoading(false)
       })
-   
+
     return () => {
       isMounted = false
     }

@@ -42,6 +42,7 @@ const InviteList = () => {
   // Hook to re-render Invitations after form submission
   useEffect(() => {
     if (bool || index > -1) {
+      console.log('rerendering')
       updateInvites()
       const updatedInvites = invitations.filter((_, i) => i !== index)
       setInvitations([...updatedInvites])
