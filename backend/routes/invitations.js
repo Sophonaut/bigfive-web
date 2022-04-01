@@ -1,6 +1,9 @@
-import { getInvitation, getUserById, getUserByEmail } from '../../lib/invitation-helpers'
-import mongoose from 'mongoose'
-const Invitation = mongoose.model('Invitation')
+// import { getInvitation, getUserById, getUserByEmail } from '../../lib/invitation-helpers'
+// import mongoose from 'mongoose'
+// const Invitation = mongoose.model('Invitation')
+const { getInvitation, getUserById, getUserByEmail } = require('../../lib/invitation-helpers')
+const { model } = require('mongoose')
+const Invitation = model('Invitation')
 
 const router = require('express').Router()
 
@@ -23,20 +26,17 @@ router.post('/invitations', async (req, res, next) => {
   const invitation = new Invitation()
   let invitee = req.body.invitee
   let user = ''
-
   const currentUserId = tokenCheck(req)
-  console.log(`currentUserId check: ${currentUserId}`)
 
   // pull invitee information based on email provided by user
-  invitee = getUserByEmail(invitee)
+  invitee = await getUserByEmail(invitee)
   if (!invitee) { return res.status(400).json({ success: false, message: 'Unable to find user' }) }
-  if (invitee._id.toString() === currentUserId) { return res.status(400).json({ success: false, message: 'Unable to share results with self!' }) }
+  // if (invitee._id.toString() === currentUserId) { return res.status(400).json({ success: false, message: 'Unable to share results with self!' }) }
+  if (invitee.get('_id') === currentUserId) { return res.status(400).json({ success: false, message: 'Unable to share results with self!' }) }
 
   // pull user inviting another based on token stored in context
-  user = getUserById(currentUserId)
+  user = await getUserById(currentUserId)
   if (!user) { return res.status(400).json({ success: false, message: "We weren't able to send this invitation...are you logged in?" }) }
-
-  console.log(`checking invitee's invitations queue: ${JSON.stringify(invitee.invitations)}`)
 
   // check duplicate invitations and assign filter results to duplicates
   // TODO: Check whitelist for existing user berfore sending invitation
@@ -61,10 +61,10 @@ router.post('/invitations', async (req, res, next) => {
       console.log(JSON.stringify(result))
 
       // after this we'll need to update the user model for the invitee with their pending invitations
-      invitee.invitations.push({ _id: result._id, invitee: invitee.email, createdBy: user.email })
+      invitee.invitations.concat([{ _id: result._id, invitee: invitee.email, createdBy: user.email }])
       await invitee.save()
 
-      return res.json({ invitation: result })
+      return res.json({ invitations: invitee.invitations })
     })
     .catch(next)
 })
@@ -76,7 +76,7 @@ router.get('/invitations/:token', async (req, res) => {
   let user = {}
   const currentUserId = tokenCheck(req)
 
-  user = getUserById(currentUserId)
+  user = await getUserById(currentUserId)
   if (!user) { return res.status(400).json({ success: false, message: "We weren't able to retrieve your invitations...are you logged in?" }) }
 
   return res.json({ invitations: user.invitations })
@@ -93,7 +93,7 @@ router.put('/invitations', async (req, res, next) => {
   let invitation = ''
   const inviteId = req.body._id
 
-  invitation = getInvitation(inviteId)
+  invitation = await getInvitation(inviteId)
   if (!invitation) { return res.status(400).json({ success: false, message: "We weren't able to update this invitation." }) }
 
   // TODO: handle case where old invitation exists and user has declined previous invitation but receives another one?
@@ -106,7 +106,7 @@ router.put('/invitations', async (req, res, next) => {
 
   // if true
   // update invitee whitelist and invitation queue
-  invitee = getUserById(invitation.invitee.get('_id'))
+  invitee = await getUserById(invitation.invitee.get('_id'))
 
   if (req.body.selection) {
     invitee.whitelist.push(invitation.createdBy)
@@ -117,12 +117,12 @@ router.put('/invitations', async (req, res, next) => {
 
   // update createdBy whitelist
   if (req.body.selection) {
-    createdBy = getUserById(invitation.createdBy.get('_id'))
+    createdBy = await getUserById(invitation.createdBy.get('_id'))
     createdBy.whitelist.push(invitation.invitee)
     await createdBy.save()
   }
 
-  return res.json({ success: true, message: 'Invitation accepted and results shared successfully!' })
+  return res.json({ success: true, message: 'Invitation accepted and results shared successfully!', invitations: invitee.invitations })
 
   // TODO: the delete function should actually go in invitation update
 })

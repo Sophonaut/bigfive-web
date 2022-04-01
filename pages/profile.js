@@ -4,14 +4,15 @@ import ProfileContent from '../components/ProfileContent'
 import InvitationManager from '../components/InvitationManager'
 import Settings from '../components/Settings'
 import { getItem } from '../lib/localStorageStore'
-import { getResultFromUser } from '../lib/fetch-result'
+import { getResultFromUser, doCalculation } from '../lib/fetch-result'
 import { TokenContext } from '../hooks/token'
 import { UserContext } from '../hooks/user'
+
 import { Layout } from '../components/alheimsins'
 import AlheimsinLayout from '../layouts/AlheimsinLayout'
 
 const Profile = ({ props }) => {
-  const { user, setUser } = useContext(UserContext)
+  const [user, setUser] = useContext(UserContext)
   const { token, setToken } = useContext(TokenContext)
   const [results, setResults] = useState([])
   const [chartWidth, setChartWidth] = useState(600)
@@ -27,9 +28,21 @@ const Profile = ({ props }) => {
   }
 
   const fetchData = async () => {
-    if (isMounted) {
-      const ret = await getResultFromUser(token, user, setUser)
-      setResults(ret)
+    if (isMounted && user.results.length < 1) {
+      console.log('retrieving results from db')
+      const ret = await getResultFromUser(token)
+      setResults(ret.result)
+      setUser({
+        ...user,
+        email: ret.user.email,
+        invitations: ret.user.invitations || [],
+        results: ret.user.results,
+        whitelist: ret.user.whitelist
+      })
+    } else if (user.results.length > 0) {
+      console.log('hydrating results from user context')
+      const userResult = user.results.slice(-1).pop()
+      setResults(doCalculation(userResult))
     }
   }
 

@@ -63,10 +63,10 @@ export default class extends Component {
             </p>
           </div>
         </SplideSlide>
-        <SplideSlide style={{ paddingTop: '20px' }}>
+        <SplideSlide style={{ overflow: 'scroll', paddingTop: '20px' }}>
           {data && data.facets && <div className='wrapper'><Summary data={data.facets} vAxis={{ minValue: 0, maxValue: 20 }} title={data.title} chartWidth={chartWidth} /></div>}
         </SplideSlide>
-        <SplideSlide style={{ overflow: 'scroll', paddingBottom: '70px', height: '100%' }}>
+        <SplideSlide style={{ overflow: 'scroll', paddingTop: '20px', paddingBottom: '70px', height: '100%' }}>
           <div className='facet-list'>
             {data && data.facets && data.facets.map((facet, index) => <Facet data={facet} key={index} />)}
           </div>
@@ -85,12 +85,14 @@ export default class extends Component {
                 margin: auto;
                 width: 90%;
                 position: relative;
+                padding-bottom: 100px;
+                overflow: scroll;
               }
               .vertical-splide-wrapper {
                 padding-top: 30px;
               }
               .domain-description, .facet-list {
-                width: 90vw;
+                width: 100%;
                 margin: auto;
               }
               `}
