@@ -11,8 +11,14 @@ import AlheimsinLayout from '../layouts/AlheimsinLayout'
 const ShowResult = () => {
   const [user, setUser] = useContext(UserContext)
   const { token, setToken } = useContext(TokenContext)
-  const [chartWidth, setChartWidth] = useState(800)
+  // we can probably do away with setResults because we're relying primarily on user/setUser from context
   const [results, setResults] = useState([])
+
+  /*
+    the local states for chartWidth & loading are important here for managing the page displayed
+    it probably doesn't make sense to consolidate this into context
+  */
+  const [chartWidth, setChartWidth] = useState(800)
   const [loading, setLoading] = useState(true)
   let isMounted = useRef(false)
 

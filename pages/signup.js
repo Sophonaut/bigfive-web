@@ -2,19 +2,13 @@ import React, { useState, useEffect } from 'react'
 import { Router } from '../routes'
 import { useRouter } from 'next/router'
 import { Field, Button, InputText, Layout } from '../components/alheimsins'
-import getConfig from 'next/config'
-import axios from 'axios'
 import { authenticationService } from '../lib/auth.service'
 import { useToken } from '../hooks/token'
+import http from '../config/axiosConfig'
 
 import AlheimsinLayout from '../layouts/VanillaLayout'
 
-const { publicRuntimeConfig } = getConfig()
-const http = axios.create({
-  baseURL: publicRuntimeConfig.URL,
-  timeout: 18000
-})
-
+// I think local state here is okay, we're using it only temporarily for the login/signup functionality
 const SignUp = () => {
   const router = useRouter()
   const queryString = router.query

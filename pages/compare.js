@@ -10,8 +10,12 @@ import AlheimsinLayout from '../layouts/AlheimsinLayout'
 
 const { publicRuntimeConfig: { URL } } = getConfig()
 
-// For reusability, it would be much sexier if we changed compare into a functional component so we can use
-// the same pageLayout paradigm across all of our pages.
+/*
+  For reusability, it would be much sexier if we changed compare into a functional component so we can use
+  the same pageLayout paradigm across all of our pages.
+  We also need to remove local state for Compare - this will be the next step because we're done with Invitations
+  for all intents and purposes
+*/
 
 export default class Compare extends Component {
   constructor (props) {

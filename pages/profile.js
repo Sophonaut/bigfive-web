@@ -14,7 +14,14 @@ import AlheimsinLayout from '../layouts/AlheimsinLayout'
 const Profile = ({ props }) => {
   const [user, setUser] = useContext(UserContext)
   const { token, setToken } = useContext(TokenContext)
+
+  // we can probably do away with setResults because we're relying primarily on user/setUser from context
   const [results, setResults] = useState([])
+
+  /*
+    the local states for chartWidth, loading, active/title are important here for managing the page displayed
+    it probably doesn't make sense to consolidate this into context
+  */
   const [chartWidth, setChartWidth] = useState(600)
   const [loading, setLoading] = useState(true)
   const [active, setActive] = useState('dashboard')
