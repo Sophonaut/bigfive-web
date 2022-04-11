@@ -3,6 +3,7 @@ import { Router } from '../routes'
 import * as gtag from '../lib/gtag'
 import { authenticationService } from '../lib/auth.service'
 import { TokenProvider } from '../hooks/token'
+import { UserProvider } from '../hooks/user'
 
 Router.onRouteChangeComplete = url => gtag.pageview(url)
 
@@ -17,7 +18,9 @@ const MyApp = ({ Component, pageProps }) => {
 
   return (
     <TokenProvider user={currentUser}>
-      {getLayout(<Component {...pageProps} />)}
+      <UserProvider>
+        {getLayout(<Component {...pageProps} />)}
+      </UserProvider>
     </TokenProvider>
   )
 }

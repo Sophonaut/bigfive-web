@@ -88,7 +88,7 @@ export default class extends Component {
               border-radius: 10px;
             } 
 
-            @media (max-width: 800px), screen and (orientation: landscape) {
+            @media (max-width: 500px) {
               .chart-container {
                 width: 50%;
                 min-width: 300px;
@@ -97,7 +97,7 @@ export default class extends Component {
               }
             }
 
-            @media (max-width: 800px), screen and (orientation: portrait) {
+            @media (max-width: 320px) {
               .chart-container {
                 width: 98vw;
                 min-width: 300px;

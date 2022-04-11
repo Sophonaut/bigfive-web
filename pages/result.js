@@ -8,6 +8,12 @@ import { getItem, clearItems } from '../lib/localStorageStore'
 import { MdDelete } from 'react-icons/md'
 const { publicRuntimeConfig: { URL } } = getConfig()
 
+/*
+  this class is essentially unused because we're routing directly to showResult
+  but still does display for a second. Not sure if we're getting the redirect from
+  componentDidMount still even though we've eliminated the route but could be worth looking at
+*/
+
 export default class extends Component {
   constructor (props) {
     super(props)

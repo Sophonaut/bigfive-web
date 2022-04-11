@@ -57,7 +57,7 @@ router.get('/user', auth.required, (req, res, next) => {
   User.findById(req.payload.id).exec().then((user) => {
     if (!user) { return res.sendStatus(401) }
 
-    return res.json({ user: user.toAuthJSON() })
+    return res.json({ user: user.toAuthJSON(), user_data: user })
   }).catch(next)
 })
 
@@ -74,7 +74,7 @@ router.get('/user/:token', (req, res) => {
       if (!user) { return res.sendStatus(401) }
 
       // TODO: support lookup keys for returning historic results
-      return res.json({ result: user.results.slice(userResultsIndex).pop() })
+      return res.json({ result: user.results.slice(userResultsIndex).pop(), user_data: user })
     })
 })
 

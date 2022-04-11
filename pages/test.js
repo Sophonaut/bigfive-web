@@ -12,6 +12,11 @@ const { getItems: getInventory, getInfo } = require('@alheimsins/b5-johnson-120-
 const getItems = require('../lib/get-items')
 const sleep = require('../lib/sleep')
 
+/*
+  this is probably the most interesting case for state for us to manage; we could probably afford
+  to do a full overhaul of how the state appears here, but we do need to figure out what the best
+  way for us to move forwards here is.
+*/
 export default class extends Component {
   static async getInitialProps ({ query, req }) {
     const lang = query.lang || 'en'

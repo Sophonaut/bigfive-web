@@ -1,26 +1,18 @@
 import { Component, Fragment } from 'react'
-import axios from 'axios'
-import getConfig from 'next/config'
 import Summary from '../components/SummaryCompare'
 // import Summary from '../components/Summary'
 import SocialShare from '../components/SocialShare'
 import { ShortcutH1, Layout } from '../components/alheimsins'
 import repackResults from '../lib/repack-results'
 import base64url from '../lib/base64url'
+import http from '../config/axiosConfig'
 
 import AlheimsinLayout from '../layouts/AlheimsinLayout'
-
-const { publicRuntimeConfig: { URL } } = getConfig()
-
-const httpInstance = axios.create({
-  baseURL: URL,
-  timeout: 8000
-})
 
 const getCompareFromId = async id => {
   const people = base64url.decode(id)
   const scores = await Promise.all(people.map(async item => {
-    const { data } = await httpInstance.get(`/api/get/${item.id}`)
+    const { data } = await http.get(`/api/get/${item.id}`)
     return { data, name: item.name }
   }))
   return repackResults(scores, scores[0].data.lang)
