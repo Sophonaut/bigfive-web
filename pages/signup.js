@@ -5,8 +5,9 @@ import { Field, Button, InputText, Layout } from '../components/alheimsins'
 import { authenticationService } from '../lib/auth.service'
 import { useToken } from '../hooks/token'
 import http from '../config/axiosConfig'
+import { toast } from 'react-toastify'
 
-import AlheimsinLayout from '../layouts/VanillaLayout'
+import AlheimsinLayout from '../layouts/AlheimsinLayout'
 
 // I think local state here is okay, we're using it only temporarily for the login/signup functionality
 const SignUp = () => {
@@ -43,10 +44,17 @@ const SignUp = () => {
   // TODO: Create vs login
   const handleLogin = async e => {
     const userData = { user: { email, password } }
-    const res = await http.post('/api/users/login', userData)
-    authenticationService.login(res.data.user)
-    setToken(res.data.user.token)
-    Router.pushRoute('/result')
+
+    try {
+      const { data } = await http.post('/api/users/login', userData)
+      authenticationService.login(data.user)
+      setToken(data.user.token)
+      toast.success(data.message)
+      Router.pushRoute('/result')
+    } catch (err) {
+      if (err.response.data) toast.error(err.response.data.message)
+    }
+
     // http.post('/api/users/login', userData)
     //   .then(res => {
     //     authenticationService.login(res.data.user)
