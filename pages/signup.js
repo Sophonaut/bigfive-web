@@ -6,7 +6,7 @@ import { authenticationService } from '../lib/auth.service'
 import { useToken } from '../hooks/token'
 import http from '../config/axiosConfig'
 
-import AlheimsinLayout from '../layouts/VanillaLayout'
+import AlheimsinLayout from '../layouts/AlheimsinLayout'
 
 // I think local state here is okay, we're using it only temporarily for the login/signup functionality
 const SignUp = () => {
@@ -37,7 +37,8 @@ const SignUp = () => {
       .catch(err => {
         console.log(err)
         console.log(err.response)
-      })
+      }
+      )
   }
 
   // TODO: Create vs login
