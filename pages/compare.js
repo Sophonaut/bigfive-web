@@ -7,10 +7,10 @@ import { Router } from '../routes'
 import base64url from '../lib/base64url'
 
 /*
-  For reusability, it would be much sexier if we changed compare into a functional component so we can use
-  the same pageLayout paradigm across all of our pages.
-  We also need to remove local state for Compare - this will be the next step because we're done with Invitations
-  for all intents and purposes
+  Compare has now been converted into a functional component with removed state.
+  There does persist a problem with refreshing while on the compare page. We need to do an initial
+  fetch of data after login while redirecting to either the profile or the results page and
+  stash UserContext in LocalStorage once we finish loading user data correctly.
 */
 
 // export default class Compare extends Component {
