@@ -29,6 +29,7 @@ const getCompareFromId = async id => {
   let { data } = await http.get(`/api/user/result/${formattedId}`)
   data = data.result
 
+  // packing current user data with retrieved
   const compareUser = { name: people.compareUser.email, data }
   const scores = [people.currentUser, compareUser]
   console.log(scores)
@@ -56,14 +57,6 @@ const Comparison = ({ data, chartWidth }) => {
         ))
       }
     </>
-  )
-}
-
-Comparison.getLayout = function getLayout (page) {
-  return (
-    <Layout>
-      <AlheimsinLayout>{page}</AlheimsinLayout>
-    </Layout>
   )
 }
 

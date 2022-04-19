@@ -4,8 +4,10 @@ const uniqueValidator = require('mongoose-unique-validator')
 const jwt = require('jsonwebtoken')
 const secret = require('../../config').JWT_SECRET
 
+// TODO: We really need to support nickname / alias so we don't expose email for Compare
 const UserSchema = new Schema({
   email: { type: String, lowercase: true, required: [true, "can't be blank"], match: [/\S+@\S+\.\S+/, 'is invalid'], index: true, unique: true },
+  nickname: { type: String, required: false },
   paid: { type: Boolean, required: false },
   salt: { type: String, required: true },
   hash: { type: String, required: true },

@@ -4,7 +4,7 @@ import { Router } from '../routes'
 import validMongoId from '../lib/valid-mongoid'
 import formatId from '../lib/format-id'
 import { Code, Field, InputTextUncontrolled, Button } from '../components/alheimsins'
-import { getItem, clearItems } from '../lib/localStorageStore'
+import { getItem, clearTestItems } from '../lib/localStorageStore'
 import { MdDelete } from 'react-icons/md'
 const { publicRuntimeConfig: { URL } } = getConfig()
 
@@ -55,7 +55,7 @@ export default class extends Component {
           resultId &&
             <p>
               Your last test ID: <Code>{resultId}</Code>
-              <a title='Delete' onClick={() => { clearItems(); window.location.reload(true) }}>
+              <a title='Delete' onClick={() => { clearTestItems(); window.location.reload(true) }}>
                 <MdDelete style={{ cursor: 'pointer', marginRight: '10px' }} />
               </a>
             </p>

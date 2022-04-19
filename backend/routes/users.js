@@ -16,6 +16,7 @@ router.post('/users', async (req, res, next) => {
   user.paid = session.payment_status === 'paid'
 
   user.email = req.body.user.email
+  user.nickname = req.body.user.nickname
   user.setPassword(req.body.user.password)
 
   if (!user.paid) {
@@ -98,6 +99,7 @@ router.get('/user/result/:id', (req, res) => {
 // PUT api/user update password and or email
 /* TODO refactor
    Does it also make sense to make PUT user update the user model to add the results?
+   TODO: Enable updating
 */
 router.put('/user', auth.required, (req, res, next) => {
   User.findById(req.payload.id).then((user) => {
@@ -108,6 +110,9 @@ router.put('/user', auth.required, (req, res, next) => {
     }
     if (typeof req.body.user.password !== 'undefined') {
       user.setPassword(req.body.user.password)
+    }
+    if (typeof req.body.user.nickname !== 'undefined') {
+      user.nickname = req.body.user.nickname
     }
 
     return user.save().then(() => {

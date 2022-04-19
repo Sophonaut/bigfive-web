@@ -4,7 +4,7 @@ import LanguageBar from '../components/LanguageBar'
 import { Button, ProgressBar, RadioGroup, Radio, Layout } from '../components/alheimsins'
 import http from '../config/axiosConfig'
 import { FaInfoCircle } from 'react-icons/fa'
-import { populateData, restoreData, getProgress, clearItems, setItem, getItem } from '../lib/localStorageStore'
+import { populateData, restoreData, getProgress, clearTestItems, setItem, getItem } from '../lib/localStorageStore'
 
 import AlheimsinLayout from '../layouts/AlheimsinLayout'
 
@@ -68,7 +68,7 @@ export default class extends Component {
   }
 
   handleClearAnswers () {
-    clearItems()
+    clearTestItems()
     window.location.reload(true)
   }
 
