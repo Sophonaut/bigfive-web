@@ -6,14 +6,9 @@ export const UserContext = createContext()
 export const UserProvider = ({ children }) => {
   let userToken = getItem('currentUser') || {}
   if (Object.keys(userToken).length > 0) userToken = JSON.parse(userToken).token
-  /*
-    this currently isn't the right way to do this but we need to define what information from the user we actually need
-    - results
-    - invites
-    - whitelist
-    - id
-    - some way to rewrite the password hash
-  */
+
+  // Right now, ID is the same as the token that's created after login
+  // We could use display name or something similar
   const [user, setUser] = useState({
     id: userToken,
     results: [],
@@ -42,8 +37,6 @@ export const UserProvider = ({ children }) => {
   }, [user.id, user.results.length])
 
   // Local Storage: SET
-  // TODO: Right now, we're not detecting changes between users once data is onboarded
-  // TODO: Find a way to update arrays in local storage
   useEffect(() => {
     console.log('update local storage with user data from fetch')
     if (user.id) window.localStorage.setItem('id', user.id)
