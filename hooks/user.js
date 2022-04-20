@@ -29,14 +29,6 @@ export const UserProvider = ({ children }) => {
     const invitationsData = JSON.parse(window.localStorage.getItem('invitations', JSON.stringify(user.invitations)))
     const whitelistData = JSON.parse(window.localStorage.getItem('whitelist', JSON.stringify(user.whitelist)))
 
-    console.log(`
-      Print 
-      idData: ${idData}
-      resultsData: ${resultsData}
-      invitationsData: ${invitationsData}
-      whitelistData: ${whitelistData}
-    `)
-
     const userData = {
       id: idData,
       results: resultsData,
@@ -44,12 +36,10 @@ export const UserProvider = ({ children }) => {
       whitelist: whitelistData
     }
 
-    console.log(userData)
-
-    if (user.id && user.results.length > 0 && user.invitations.length > 0 && user.whitelist.length > 0) {
+    if (idData && resultsData && resultsData.length > 0) {
       setUser(userData)
     }
-  }, [user])
+  }, [user.id, user.results.length])
 
   // Local Storage: SET
   // TODO: Right now, we're not detecting changes between users once data is onboarded
@@ -57,15 +47,10 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     console.log('update local storage with user data from fetch')
     if (user.id) window.localStorage.setItem('id', user.id)
-    if (user.results.length > 0) window.localStorage.setItem('results', JSON.stringify(user.results))
-    if (user.invitations.length > 0) window.localStorage.setItem('invitations', JSON.stringify(user.invitations))
-    if (user.whitelist.length > 0) window.localStorage.setItem('whitelist', JSON.stringify(user.whitelist))
-
-    window.localStorage.setItem('id', user.id)
-    window.localStorage.setItem('results', JSON.stringify(user.results))
-    window.localStorage.setItem('invitations', JSON.stringify(user.invitations))
-    window.localStorage.setItem('whitelist', JSON.stringify(user.whitelist))
-  }, [user.id, user.results.length, user.invitations.length, user.whitelist.length])
+    if (user.results && user.results.length > 0) window.localStorage.setItem('results', JSON.stringify(user.results))
+    if (user.invitatinos && user.invitations.length > 0) window.localStorage.setItem('invitations', JSON.stringify(user.invitations))
+    if (user.whitelist && user.whitelist.length > 0) window.localStorage.setItem('whitelist', JSON.stringify(user.whitelist))
+  }, [user.results.length])
 
   return (
     <UserContext.Provider value={[user, setUser]}>

@@ -9,8 +9,6 @@ import http from '../config/axiosConfig'
 import AlheimsinLayout from '../layouts/AlheimsinLayout'
 
 // I think local state here is okay, we're using it only temporarily for the login/signup functionality
-// TODO: Pull user data on login
-// TODO: Stash UserContext on successful query in LocalStorage until logout.
 const SignUp = () => {
   const router = useRouter()
   const queryString = router.query
@@ -51,17 +49,7 @@ const SignUp = () => {
     const res = await http.post('/api/users/login', userData)
     authenticationService.login(res.data.user)
     setToken(res.data.user.token)
-    Router.pushRoute('/result')
-    // http.post('/api/users/login', userData)
-    //   .then(res => {
-    //     authenticationService.login(res.data.user)
-    //     setToken(res.data.user.token)
-    //     Router.pushRoute('/result')
-    //   })
-    //   .catch(err => {
-    //     console.log(err)
-    //     console.log(err.response)
-    //   })
+    window.location = '/result'
   }
   // TODO: Add error handling
 
