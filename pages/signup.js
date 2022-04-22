@@ -15,6 +15,7 @@ const SignUp = () => {
   const queryString = router.query
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [nickname, setNickname] = useState('')
   const [loggingIn, setLoggingIn] = useState(true)
   const { setToken } = useToken()
 
@@ -26,8 +27,9 @@ const SignUp = () => {
     }
   })
 
+  // TODO: Handle create nickname, make required
   const handleCreateAccount = e => {
-    const userData = { user: { email, password } }
+    const userData = { user: { email, password, nickname } }
     http.post(`/api/users?sessionId=${queryString.session_id}`, userData)
       .then(res => {
         console.log(res)
@@ -38,34 +40,24 @@ const SignUp = () => {
       .catch(err => {
         console.log(err)
         console.log(err.response)
-      })
+      }
+      )
   }
 
   // TODO: Create vs login
   const handleLogin = async e => {
     const userData = { user: { email, password } }
-
     try {
-      const { data } = await http.post('/api/users/login', userData)
-      authenticationService.login(data.user)
-      setToken(data.user.token)
+      const res = await http.post('/api/users/login', userData)
+      authenticationService.login(res.data.user)
+      setToken(res.data.user.token)
       toast.success(data.message)
-      Router.pushRoute('/result')
+      window.location = '/result'
     } catch (err) {
       if (err.response.data) toast.error(err.response.data.message)
     }
-
-    // http.post('/api/users/login', userData)
-    //   .then(res => {
-    //     authenticationService.login(res.data.user)
-    //     setToken(res.data.user.token)
-    //     Router.pushRoute('/result')
-    //   })
-    //   .catch(err => {
-    //     console.log(err)
-    //     console.log(err.response)
-    //   })
   }
+
   // TODO: Add error handling
 
   const handleSubmit = e => {
@@ -91,9 +83,16 @@ const SignUp = () => {
         <Field name='Email'>
           <InputText name='email' value={email} onChange={e => { setEmail(e.target.value) }} placeholder='Enter your email' autoComplete='off' autoFocus />
         </Field>
-        <Field name='Password' style={{ marginBottom: 0 }}>
+        <Field name='Password'>
           <InputText name='password' value={password} onChange={e => { setPassword(e.target.value) }} placeholder='password' autoComplete='off' type='password' />
         </Field>
+        {loggingIn
+          ? (<></>)
+          : (
+            <Field name='Nickname' style={{ marginBottom: 0 }}>
+              <InputText name='password' value={nickname} onChange={e => { setNickname(e.target.value) }} placeholder='nickname' autoComplete='off' />
+            </Field>
+          )}
 
         <Button value={buttonText()} type='submit' />
 

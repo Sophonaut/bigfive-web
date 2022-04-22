@@ -3,10 +3,12 @@ import Router from 'next/router'
 import { authenticationService } from '../../lib/auth.service'
 import { TokenContext } from '../../hooks/token'
 import { useContext } from 'react'
+import { clearItems } from '../../lib/localStorageStore'
 
 const handleLogout = (setToken) => {
   authenticationService.logout()
   setToken('')
+  clearItems()
   Router.push('/buy')
 }
 

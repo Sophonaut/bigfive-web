@@ -51,6 +51,7 @@ router.post('/invitations', async (req, res, next) => {
   }
 
   // initialize invitation fields if users are both valid
+  // TODO: replace email with nickname
   invitation.invitee = { email: invitee.email, _id: invitee._id.toString() }
   invitation.createdBy = { email: user.email, _id: currentUserId }
   invitation.accepted = false
@@ -60,6 +61,7 @@ router.post('/invitations', async (req, res, next) => {
       // check this to ensure that ID is being added after the save to DB
       console.log(JSON.stringify(result))
 
+      // TODO: Replace email with nickname
       // after this we'll need to update the user model for the invitee with their pending invitations
       invitee.invitations.concat([{ _id: result._id, invitee: invitee.email, createdBy: user.email }])
       await invitee.save()

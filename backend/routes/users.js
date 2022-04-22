@@ -16,6 +16,7 @@ router.post('/users', async (req, res, next) => {
   user.paid = session.payment_status === 'paid'
 
   user.email = req.body.user.email
+  user.nickname = req.body.user.nickname
   user.setPassword(req.body.user.password)
 
   if (!user.paid) {
@@ -81,9 +82,27 @@ router.get('/user/:token', (req, res) => {
     })
 })
 
+// GET results from user via :id
+router.get('/user/result/:id', (req, res) => {
+  const userId = req.params && req.params.id ? req.params.id : false
+  if (!userId) throw new Error('Not a valid query')
+
+  // check to see if request is looking for particular user result, otherwise return most recently pushed
+  const userResultsIndex = req.params.index || -1
+  User.findOne({ _id: mongo.ObjectId(userId) })
+    .exec()
+    .then(user => {
+      if (!user) { return res.sendStatus(401) }
+
+      // TODO: support lookup keys for returning historic results
+      return res.json({ result: user.results.slice(userResultsIndex).pop() })
+    })
+})
+
 // PUT api/user update password and or email
 /* TODO refactor
    Does it also make sense to make PUT user update the user model to add the results?
+   TODO: Enable updating
 */
 router.put('/user', auth.required, (req, res, next) => {
   User.findById(req.payload.id).then((user) => {
@@ -94,6 +113,9 @@ router.put('/user', auth.required, (req, res, next) => {
     }
     if (typeof req.body.user.password !== 'undefined') {
       user.setPassword(req.body.user.password)
+    }
+    if (typeof req.body.user.nickname !== 'undefined') {
+      user.nickname = req.body.user.nickname
     }
 
     return user.save().then(() => {

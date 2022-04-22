@@ -4,17 +4,36 @@ import Summary from '../components/SummaryCompare'
 import SocialShare from '../components/SocialShare'
 import { ShortcutH1, Layout } from '../components/alheimsins'
 import repackResults from '../lib/repack-results'
+import validMongoId from '../lib/valid-mongoid'
+import formatId from '../lib/format-id'
 import base64url from '../lib/base64url'
 import http from '../config/axiosConfig'
 
 import AlheimsinLayout from '../layouts/AlheimsinLayout'
 
+/**
+ * Right now, this takes the people array built up from compare.js and pushes it to this file,
+ * obtaining the result one at a time and returning data objects for the comparison to be processed.
+ * The processing function might work for us if we pass data the correct way, but it might be better
+ * to rewrite the structure here for score processing.
+ *
+ * @param {*} id
+ * @returns
+ */
 const getCompareFromId = async id => {
+  // passes the people from compare to showCompare via { id }
   const people = base64url.decode(id)
-  const scores = await Promise.all(people.map(async item => {
-    const { data } = await http.get(`/api/get/${item.id}`)
-    return { data, name: item.name }
-  }))
+  const formattedId = formatId(people.compareUser._id)
+  if (!validMongoId(formattedId)) throw new Error('Invalid id')
+
+  let { data } = await http.get(`/api/user/result/${formattedId}`)
+  data = data.result
+
+  // packing current user data with retrieved
+  const compareUser = { name: people.compareUser.email, data }
+  const scores = [people.currentUser, compareUser]
+  console.log(scores)
+
   return repackResults(scores, scores[0].data.lang)
 }
 
@@ -38,14 +57,6 @@ const Comparison = ({ data, chartWidth }) => {
         ))
       }
     </>
-  )
-}
-
-Comparison.getLayout = function getLayout (page) {
-  return (
-    <Layout>
-      <AlheimsinLayout>{page}</AlheimsinLayout>
-    </Layout>
   )
 }
 
@@ -101,4 +112,12 @@ export default class showCompare extends Component {
       </>
     )
   }
+}
+
+showCompare.getLayout = function getLayout (page) {
+  return (
+    <Layout>
+      <AlheimsinLayout>{page}</AlheimsinLayout>
+    </Layout>
+  )
 }
