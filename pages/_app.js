@@ -4,6 +4,9 @@ import * as gtag from '../lib/gtag'
 import { authenticationService } from '../lib/auth.service'
 import { TokenProvider } from '../hooks/token'
 import { UserProvider } from '../hooks/user'
+import { ToastContainer } from 'react-toastify'
+
+import 'react-toastify/dist/ReactToastify.css'
 
 Router.onRouteChangeComplete = url => gtag.pageview(url)
 
@@ -19,6 +22,14 @@ const MyApp = ({ Component, pageProps }) => {
   return (
     <TokenProvider user={currentUser}>
       <UserProvider>
+        <ToastContainer
+          position='bottom-right'
+          autoClose={2000}
+          newestOnTop
+          closeOnClick
+          draggable
+          pauseOnHover
+        />
         {getLayout(<Component {...pageProps} />)}
       </UserProvider>
     </TokenProvider>
