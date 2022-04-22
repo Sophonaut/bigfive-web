@@ -4,7 +4,12 @@ const passport = require('passport')
 const mongo = require('mongojs')
 const User = model('User')
 const auth = require('./auth')
+const config = require('../../config')
+const validMongoId = require('../../lib/valid-mongoid')
 const { getStripeSession } = require('./stripe')
+
+const db = mongo(config.DB_CONNECTION)
+const collection = db.collection(config.DB_COLLECTION)
 
 // POST api/users registers users
 router.post('/users', async (req, res, next) => {
@@ -54,7 +59,7 @@ router.post('/users/login', (req, res, next) => {
 })
 
 // GET api/user verify a specific user is logged in
-router.get('/user', auth.required, (req, res, next) => {
+router.get('/user', auth.required, async (req, res, next) => {
   User.findById(req.payload.id).exec().then((user) => {
     if (!user) { return res.sendStatus(401) }
 
@@ -62,38 +67,58 @@ router.get('/user', auth.required, (req, res, next) => {
   }).catch(next)
 })
 
-router.get('/user/:token', (req, res) => {
+router.get('/user/:token', async (req, res) => {
   const token = req.params && req.params.token ? req.params.token.split('.') : false
   if (!token) throw new Error('Not a valid query')
   const userId = JSON.parse(Buffer.from(token[1], 'base64').toString('ascii')).id
 
   // check to see if request is looking for particular user result, otherwise return most recently pushed
-  const userResultsIndex = req.params.index || -1
-  User.findOne({ _id: mongo.ObjectId(userId) })
-    .exec()
-    .then(user => {
-      if (!user) { return res.sendStatus(401) }
+  // could be functionalized
+  console.log('running user query')
+  const user = await User.findOne({ _id: mongo.ObjectId(userId) }).exec()
+  if (!user) { return res.sendStatus(401) }
 
-      // TODO: support lookup keys for returning historic results
-      return res.json({ result: user.results.slice(userResultsIndex).pop(), user_data: user })
-    })
+  const userResultsIndex = req.params.index || user.results.length - 1
+
+  // TODO: functionalize to retrieve result from user
+  const id = user.results[userResultsIndex]
+  console.log(`checking mongo.ObjectId(id) on /user/:token: ${mongo.ObjectId(id)}`)
+  if (!id || !validMongoId(id)) throw new Error('Result ID stored on user is not a valid id')
+
+  await collection.findOne({ _id: mongo.ObjectId(id) }, (err, data) => {
+  // const result = await collection.findOne({ _id: mongo.ObjectId(id) }, (err, data) => {
+    if (err) return res.sendStatus(401)
+    return res.json({ result: data, user_data: user })
+  })
+
+  // if (!result) { return res.sendStatus(401) }
+
+  // TODO: support lookup keys for returning historic results
 })
 
 // GET results from user via :id
-router.get('/user/result/:id', (req, res) => {
+router.get('/user/result/:id', async (req, res) => {
   const userId = req.params && req.params.id ? req.params.id : false
   if (!userId) throw new Error('Not a valid query')
 
   // check to see if request is looking for particular user result, otherwise return most recently pushed
-  const userResultsIndex = req.params.index || -1
-  User.findOne({ _id: mongo.ObjectId(userId) })
-    .exec()
-    .then(user => {
-      if (!user) { return res.sendStatus(401) }
+  const user = await User.findOne({ _id: mongo.ObjectId(userId) }).exec()
+  const userResultsIndex = req.params.index || user.results.length - 1
 
-      // TODO: support lookup keys for returning historic results
-      return res.json({ result: user.results.slice(userResultsIndex).pop() })
-    })
+  if (!user) { return res.sendStatus(401) }
+
+  // TODO: functionalize to retrieve result from user
+  const id = user.results[userResultsIndex]
+  console.log(`checking ID on /user/results/:id: ${id}`)
+  if (!id || !validMongoId(id)) throw new Error('Result ID stored on user is not a valid id')
+
+  await collection.findOne({ _id: mongo.ObjectId(id) }, (err, data) => {
+  // const result = await collection.findOne({ _id: mongo.ObjectId(id) }, (err, data) => {
+    if (err) return res.sendStatus(401)
+    return res.json({ result: data })
+  })
+
+  // TODO: support lookup keys for returning historic results
 })
 
 // PUT api/user update password and or email
