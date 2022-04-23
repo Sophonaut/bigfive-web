@@ -39,21 +39,24 @@ router.post('/users', async (req, res, next) => {
 // POST api/users/login log a user in with a valid email and pass
 router.post('/users/login', (req, res, next) => {
   if (!req.body.user.email) {
-    return res.status(422).json({ errors: { email: "can't be blank" } })
+    return res.status(422).json({ success: false, message: "Email can't be blank" })
   }
 
   if (!req.body.user.password) {
-    return res.status(422).json({ errors: { password: "can't be blank" } })
+    return res.status(422).json({ success: false, message: "Password can't be blank" })
   }
 
   passport.authenticate('local', { session: false }, (err, user, info) => {
-    if (err) { return next(err) }
+    if (err) {
+      return res.status(422).json({ success: false, message: 'Issue authenticating' })
+      // return next(err)
+    }
 
     if (user) {
       user.token = user.generateJWT()
-      return res.json({ user: user.toAuthJSON(user) })
+      return res.json({ success: true, message: 'Login successful!', user: user.toAuthJSON(user) })
     } else {
-      return res.status(422).json(info)
+      return res.status(422).json({ ...info, success: false, message: 'Unable to authenticate based on information provided' })
     }
   })(req, res, next)
 })

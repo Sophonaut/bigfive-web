@@ -5,6 +5,7 @@ import { Field, Button, InputText, Layout } from '../components/alheimsins'
 import { authenticationService } from '../lib/auth.service'
 import { useToken } from '../hooks/token'
 import http from '../config/axiosConfig'
+import { toast } from 'react-toastify'
 
 import AlheimsinLayout from '../layouts/AlheimsinLayout'
 
@@ -46,11 +47,17 @@ const SignUp = () => {
   // TODO: Create vs login
   const handleLogin = async e => {
     const userData = { user: { email, password } }
-    const res = await http.post('/api/users/login', userData)
-    authenticationService.login(res.data.user)
-    setToken(res.data.user.token)
-    window.location = '/result'
+    try {
+      const res = await http.post('/api/users/login', userData)
+      authenticationService.login(res.data.user)
+      setToken(res.data.user.token)
+      toast.success(data.message)
+      window.location = '/result'
+    } catch (err) {
+      if (err.response.data) toast.error(err.response.data.message)
+    }
   }
+
   // TODO: Add error handling
 
   const handleSubmit = e => {
