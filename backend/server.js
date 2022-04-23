@@ -72,16 +72,22 @@ app.prepare().then(() => {
     })
   })
 
-  server.post('/api/save', (req, res) => {
+  server.post('/api/save', async (req, res) => {
     const token = req.body.user && req.body.user.token ? req.body.user.token.split('.') : false
     if (!token) throw new Error('Not a valid query')
     const userId = JSON.parse(Buffer.from(token[1], 'base64').toString('ascii')).id
+
+    const payload = req.body.result
+    const result = await collection.insert(payload)
+    if (!result) return res.sendStatus(401)
+
+    console.log(JSON.stringify(result))
 
     if (userId) {
       User.findOne({ _id: mongo.ObjectId(userId) })
         .exec()
         .then((user) => {
-          user.results.push(req.body.result)
+          user.results.push(result._id)
           user.save((err) => {
             if (err) throw err
           })
@@ -89,11 +95,7 @@ app.prepare().then(() => {
         .catch(err => { throw new Error(err) })
     }
 
-    const payload = req.body.result
-    collection.insert(payload, (error, data) => {
-      if (error) throw error
-      res.send(data)
-    })
+    res.send(data)
   })
 
   // api/users routes mounted
