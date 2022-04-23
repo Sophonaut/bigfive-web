@@ -82,16 +82,12 @@ router.get('/user/:token', async (req, res) => {
 
   // TODO: functionalize to retrieve result from user
   const id = user.results[userResultsIndex]
-  console.log(`checking mongo.ObjectId(id) on /user/:token: ${mongo.ObjectId(id)}`)
   if (!id || !validMongoId(id)) throw new Error('Result ID stored on user is not a valid id')
 
   await collection.findOne({ _id: mongo.ObjectId(id) }, (err, data) => {
-  // const result = await collection.findOne({ _id: mongo.ObjectId(id) }, (err, data) => {
     if (err) return res.sendStatus(401)
     return res.json({ result: data, user_data: user })
   })
-
-  // if (!result) { return res.sendStatus(401) }
 
   // TODO: support lookup keys for returning historic results
 })
@@ -113,7 +109,6 @@ router.get('/user/result/:id', async (req, res) => {
   if (!id || !validMongoId(id)) throw new Error('Result ID stored on user is not a valid id')
 
   await collection.findOne({ _id: mongo.ObjectId(id) }, (err, data) => {
-  // const result = await collection.findOne({ _id: mongo.ObjectId(id) }, (err, data) => {
     if (err) return res.sendStatus(401)
     return res.json({ result: data })
   })

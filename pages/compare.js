@@ -6,50 +6,6 @@ import AlheimsinLayout from '../layouts/AlheimsinLayout'
 import { Router } from '../routes'
 import base64url from '../lib/base64url'
 
-/*
-  Compare has now been converted into a functional component with removed state.
-  There does persist a problem with refreshing while on the compare page. We need to do an initial
-  fetch of data after login while redirecting to either the profile or the results page and
-  stash UserContext in LocalStorage once we finish loading user data correctly.
-*/
-
-// export default class Compare extends Component {
-// constructor (props) {
-//   super(props)
-//   this.state = {
-//     people: []
-//   }
-//   this.handleAdd = this.handleAdd.bind(this)
-//   this.handleChange = this.handleChange.bind(this)
-//   this.handleDelete = this.handleDelete.bind(this)
-//   this.handleCompare = this.handleCompare.bind(this)
-// }
-
-// handleChange ({ target }) {
-//   const id = target.value
-//   const error = id && target.name === 'id' && !validMongoId(formatId(id)) ? 'Not a valid ID' : false
-//   this.setState({ [target.name]: id, error })
-// }
-
-// handleDelete (num) {
-//   const people = this.state.people
-//   people.splice(num, 1)
-//   this.setState({ people: [...people] })
-// }
-
-// handleAdd (e) {
-//   e.preventDefault()
-//   const name = this.state.name
-//   const id = formatId(this.state.id)
-//   this.setState({ name: '', id: '', people: [...this.state.people, { name, id }] })
-// }
-
-// handleCompare () {
-//   const people = JSON.stringify(this.state.people)
-//   const id = base64url.encode(people)
-//   Router.pushRoute('showCompare', { id })
-// }
-
 const Compare = () => {
   const [user] = useContext(UserContext)
 
@@ -67,13 +23,10 @@ const Compare = () => {
     let people = {
       currentUser: {
         name: user.email,
-        data: user.results.slice(-1).pop()
+        data: user.currentResult
       },
       compareUser: compareUser
     }
-
-    // Sanity check people prior to sending to showCompare
-    console.log(JSON.stringify(people))
 
     people = JSON.stringify(people)
     const id = base64url.encode(people)

@@ -38,7 +38,7 @@ const ShowResult = () => {
     if (isMounted && currentResultIsEmpty) {
       console.log('retrieving results from db')
       const ret = await getResultFromUser(token)
-      setResults(ret.result)
+      setResults(doCalculation(ret.result))
       setUser({
         ...user,
         email: ret.user.email,
@@ -49,7 +49,6 @@ const ShowResult = () => {
       })
     } else if (!currentResultIsEmpty) {
       console.log('hydrating results from user context')
-      console.log(`sanity check userResult prior to setResults(doCalculation()): ${JSON.stringify(user.currentResult)}`)
       setResults(doCalculation(user.currentResult))
     }
   }
