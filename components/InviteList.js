@@ -3,7 +3,7 @@ import { TokenContext } from '../hooks/token'
 import { UserContext } from '../hooks/user'
 import Invitation from './Invitation'
 import http from '../config/axiosConfig'
-import { catchLog } from '../lib/catchlog'
+import { toast } from 'react-toastify'
 
 const InviteList = () => {
   const { token } = useContext(TokenContext)
@@ -17,11 +17,17 @@ const InviteList = () => {
     console.log(`check user.invitations: ${user.invitations}`)
     // handle case where user invitations haven't been properly loaded yet
     if (!user.invitations || user.invitations.length < 1) {
-      const res = await http.get(`/api/invitations/${token}`)
-        .catch(error => catchLog(error))
+      const result = await http.get(`/api/invitations/${token}`)
+      const resultSuccess = result && result.data && result.data.success
+      resultSuccess
+        ? toast.success(result.data.message)
+        : toast.error(result.data.message)
+
+      console.log(`sanity check result.data.invitations after http call: ${result.data.invitations}`)
+
       setUser({
         ...user,
-        invitations: res.data.invitations || []
+        invitations: result.data.invitations || []
       })
     }
   }
@@ -44,7 +50,6 @@ const InviteList = () => {
       selection: bool
     }
     const res = await http.put('/api/invitations', params)
-      .catch(error => catchLog(error))
     setUser({
       ...user,
       invitations: res.data.invitations || []

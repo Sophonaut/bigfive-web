@@ -70,7 +70,7 @@ export const UserProvider = ({ children }) => {
       window.localStorage.setItem('currentResult', JSON.stringify(user.currentResult))
       console.log('did update localstorage currentResult in UserContext SET')
     }
-  }, [])
+  }, [user.resultIds.length, user.whitelist, user.invitations])
 
   return (
     <UserContext.Provider value={[user, setUser]}>
