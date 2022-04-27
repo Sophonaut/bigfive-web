@@ -22,9 +22,6 @@ const InviteList = () => {
       resultSuccess
         ? toast.success(result.data.message)
         : toast.error(result.data.message)
-
-      console.log(`sanity check result.data.invitations after http call: ${result.data.invitations}`)
-
       setUser({
         ...user,
         invitations: result.data.invitations || []

@@ -9,6 +9,8 @@ import base64url from '../lib/base64url'
 const Compare = () => {
   const [user] = useContext(UserContext)
 
+  console.log(`sanity check user.whitelist: ${JSON.stringify(user.whitelist)}`)
+
   /**
    * handleClick needs to run the comparison for the user selected in the dropdown menu upstream
    */
@@ -17,7 +19,6 @@ const Compare = () => {
   }
 
   const handleCompare = (index) => {
-    console.log()
     const compareUser = user.whitelist[index]
 
     let people = {
