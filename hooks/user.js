@@ -38,17 +38,17 @@ export const UserProvider = ({ children }) => {
       console.log('updating user from local storage because condition was met')
       setUser(userData)
     }
-  }, [user.resultIds.length, user.whitelist.length])
+  }, [user.resultIds.length, setUser])
 
   // Local Storage: SET
   useEffect(() => {
     console.log('start SET from localstorage in UserContext')
 
     const idData = window.localStorage.getItem('id', user.id)
-    const resultIdData = JSON.parse(window.localStorage.getItem('results', JSON.stringify(user.resultIds))) || null
-    const invitationsData = JSON.parse(window.localStorage.getItem('invitations', JSON.stringify(user.invitations))) || null
-    const whitelistData = JSON.parse(window.localStorage.getItem('whitelist', JSON.stringify(user.whitelist))) || null
-    const currentResultData = JSON.parse(window.localStorage.getItem('currentResult', JSON.stringify(user.currentResult))) || null
+    const resultIdData = JSON.parse(window.localStorage.getItem('results', JSON.stringify(user.resultIds))) || []
+    const invitationsData = JSON.parse(window.localStorage.getItem('invitations', JSON.stringify(user.invitations))) || []
+    const whitelistData = JSON.parse(window.localStorage.getItem('whitelist', JSON.stringify(user.whitelist))) || []
+    const currentResultData = JSON.parse(window.localStorage.getItem('currentResult', JSON.stringify(user.currentResult))) || []
 
     if (user.id && user.id !== idData) {
       window.localStorage.setItem('id', user.id)
@@ -70,7 +70,7 @@ export const UserProvider = ({ children }) => {
       window.localStorage.setItem('currentResult', JSON.stringify(user.currentResult))
       console.log('did update localstorage currentResult in UserContext SET')
     }
-  }, [])
+  }, [user.resultIds.length, user.whitelist.length, setUser])
 
   return (
     <UserContext.Provider value={[user, setUser]}>

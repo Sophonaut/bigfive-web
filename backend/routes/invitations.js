@@ -28,15 +28,17 @@ router.post('/invitations', async (req, res, next) => {
   let user = ''
   const currentUserId = tokenCheck(req)
 
+  console.log(`check invitee at start of request: ${invitee}`)
+
   // pull invitee information based on email provided by user
   invitee = await getUserByEmail(invitee)
-  if (!invitee) { return res.status(400).json({ success: false, message: 'Unable to find user' }) }
-  // if (invitee._id.toString() === currentUserId) { return res.status(400).json({ success: false, message: 'Unable to share results with self!' }) }
-  if (invitee.get('_id') === currentUserId) { return res.status(400).json({ success: false, message: 'Unable to share results with self!' }) }
+  if (!invitee) { return res.json({ success: false, message: 'Unable to find user' }) }
+  if (invitee._id.toString() === currentUserId) { return res.json({ success: false, message: 'Unable to share results with self!' }) }
 
   // pull user inviting another based on token stored in context
   user = await getUserById(currentUserId)
-  if (!user) { return res.status(400).json({ success: false, message: "We weren't able to send this invitation...are you logged in?" }) }
+  if (!user) { return res.json({ success: false, message: "We weren't able to send this invitation...are you logged in?" }) }
+  console.log(`check user after retrieving their user model by ID: ${user}`)
 
   // check duplicate invitations and assign filter results to duplicates
   // TODO: Check whitelist for existing user berfore sending invitation
@@ -47,7 +49,7 @@ router.post('/invitations', async (req, res, next) => {
     })
   }
   if (duplicates.length > 0) {
-    return res.status(400).json({ message: 'Invite for this user already exists!' })
+    return res.json({ success: false, message: 'Invite for this user already exists!' })
   }
 
   // initialize invitation fields if users are both valid
@@ -59,14 +61,16 @@ router.post('/invitations', async (req, res, next) => {
   invitation.save()
     .then(async result => {
       // check this to ensure that ID is being added after the save to DB
-      console.log(JSON.stringify(result))
+      console.log(`check result on invitation.save().then(): ${JSON.stringify(result)}`)
 
       // TODO: Replace email with nickname
       // after this we'll need to update the user model for the invitee with their pending invitations
-      invitee.invitations.concat([{ _id: result._id, invitee: invitee.email, createdBy: user.email }])
-      await invitee.save()
-
-      return res.json({ invitations: invitee.invitations })
+      invitee.invitations.push({ _id: result.get('_id'), invitee: invitee.email, createdBy: user.email })
+      console.log(`invitee after modifying their invitations queue: ${JSON.stringify(invitee)}`)
+      await invitee.save().then(outcome => {
+        console.log(`validate outcome of invitee.save(): ${JSON.stringify(outcome)}`)
+      })
+      return res.json({ success: true, message: 'Invite sent successfully!' })
     })
     .catch(next)
 })
@@ -79,9 +83,9 @@ router.get('/invitations/:token', async (req, res) => {
   const currentUserId = tokenCheck(req)
 
   user = await getUserById(currentUserId)
-  if (!user) { return res.status(400).json({ success: false, message: "We weren't able to retrieve your invitations...are you logged in?" }) }
+  if (!user) { return res.json({ success: false, message: "We weren't able to retrieve your invitations...are you logged in?" }) }
 
-  return res.json({ invitations: user.invitations })
+  return res.json({ invitations: user.invitations, success: true, message: 'Invitations successfully retrieved!' })
 })
 
 /*
@@ -96,7 +100,7 @@ router.put('/invitations', async (req, res, next) => {
   const inviteId = req.body._id
 
   invitation = await getInvitation(inviteId)
-  if (!invitation) { return res.status(400).json({ success: false, message: "We weren't able to update this invitation." }) }
+  if (!invitation) { return res.json({ success: false, message: "We weren't able to update this invitation." }) }
 
   // TODO: handle case where old invitation exists and user has declined previous invitation but receives another one?
 
@@ -123,8 +127,7 @@ router.put('/invitations', async (req, res, next) => {
     createdBy.whitelist.push(invitation.invitee)
     await createdBy.save()
   }
-
-  return res.json({ success: true, message: 'Invitation accepted and results shared successfully!', invitations: invitee.invitations })
+  return res.json({ success: true, message: 'Invitation accepted and results shared successfully!', invitations: invitee.invitations, whitelist: invitee.whitelist })
 
   // TODO: the delete function should actually go in invitation update
 })
