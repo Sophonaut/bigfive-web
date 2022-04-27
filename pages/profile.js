@@ -45,7 +45,7 @@ const Profile = ({ props }) => {
         email: ret.user.email,
         invitations: ret.user.invitations || [],
         resultIds: ret.user.resultIds,
-        whitelist: ret.user.whitelist,
+        whitelist: ret.user.whitelist || [],
         currentResult: ret.result
       })
     } else if (!currentResultIsEmpty) {

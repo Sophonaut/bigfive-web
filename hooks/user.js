@@ -38,7 +38,7 @@ export const UserProvider = ({ children }) => {
       console.log('updating user from local storage because condition was met')
       setUser(userData)
     }
-  }, [user.resultIds.length, user.whitelist.length])
+  }, [user.resultIds.length, setUser])
 
   // Local Storage: SET
   useEffect(() => {
@@ -70,7 +70,7 @@ export const UserProvider = ({ children }) => {
       window.localStorage.setItem('currentResult', JSON.stringify(user.currentResult))
       console.log('did update localstorage currentResult in UserContext SET')
     }
-  }, [user.resultIds.length, user.whitelist, user.invitations])
+  }, [user.resultIds.length, setUser])
 
   return (
     <UserContext.Provider value={[user, setUser]}>
