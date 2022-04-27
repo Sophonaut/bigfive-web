@@ -32,12 +32,12 @@ router.post('/invitations', async (req, res, next) => {
 
   // pull invitee information based on email provided by user
   invitee = await getUserByEmail(invitee)
-  if (!invitee) { return res.status(400).json({ success: false, message: 'Unable to find user' }) }
+  if (!invitee) { return res.json({ success: false, message: 'Unable to find user' }) }
   if (invitee._id.toString() === currentUserId) { return res.json({ success: false, message: 'Unable to share results with self!' }) }
 
   // pull user inviting another based on token stored in context
   user = await getUserById(currentUserId)
-  if (!user) { return res.status(400).json({ success: false, message: "We weren't able to send this invitation...are you logged in?" }) }
+  if (!user) { return res.json({ success: false, message: "We weren't able to send this invitation...are you logged in?" }) }
   console.log(`check user after retrieving their user model by ID: ${user}`)
 
   // check duplicate invitations and assign filter results to duplicates
@@ -49,7 +49,7 @@ router.post('/invitations', async (req, res, next) => {
     })
   }
   if (duplicates.length > 0) {
-    return res.status(400).json({ success: false, message: 'Invite for this user already exists!' })
+    return res.json({ success: false, message: 'Invite for this user already exists!' })
   }
 
   // initialize invitation fields if users are both valid
@@ -83,7 +83,7 @@ router.get('/invitations/:token', async (req, res) => {
   const currentUserId = tokenCheck(req)
 
   user = await getUserById(currentUserId)
-  if (!user) { return res.status(400).json({ success: false, message: "We weren't able to retrieve your invitations...are you logged in?" }) }
+  if (!user) { return res.json({ success: false, message: "We weren't able to retrieve your invitations...are you logged in?" }) }
 
   return res.json({ invitations: user.invitations, success: true, message: 'Invitations successfully retrieved!' })
 })
@@ -100,7 +100,7 @@ router.put('/invitations', async (req, res, next) => {
   const inviteId = req.body._id
 
   invitation = await getInvitation(inviteId)
-  if (!invitation) { return res.status(400).json({ success: false, message: "We weren't able to update this invitation." }) }
+  if (!invitation) { return res.json({ success: false, message: "We weren't able to update this invitation." }) }
 
   // TODO: handle case where old invitation exists and user has declined previous invitation but receives another one?
 
@@ -128,7 +128,9 @@ router.put('/invitations', async (req, res, next) => {
     await createdBy.save()
   }
 
-  return res.json({ success: true, message: 'Invitation accepted and results shared successfully!', invitations: invitee.invitations })
+
+  // TODO: on accepting the invitation, we should update the user model and user context so that the user can move directly to compare
+  return res.json({ success: true, message: 'Invitation accepted and results shared successfully!', invitations: invitee.invitations, whitelist: invitee.whitelist })
 
   // TODO: the delete function should actually go in invitation update
 })

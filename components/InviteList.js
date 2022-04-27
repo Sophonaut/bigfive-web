@@ -8,7 +8,7 @@ import { toast } from 'react-toastify'
 const InviteList = () => {
   const { token } = useContext(TokenContext)
   const [user, setUser] = useContext(UserContext)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(null)
   const [bool, setBool] = useState(false)
   const [index, setIndex] = useState(-1)
 
@@ -34,7 +34,10 @@ const InviteList = () => {
 
   // Hook to handleLoad then show relevant invitation info after load
   useEffect(() => {
-    handleLoad().then(() => setLoading(false))
+    handleLoad()
+    if (loading !== null) {
+      setLoading(false)
+    }
   }, [loading])
 
   // Handle event default behavior then pipe to updateInvites
@@ -52,7 +55,8 @@ const InviteList = () => {
     const res = await http.put('/api/invitations', params)
     setUser({
       ...user,
-      invitations: res.data.invitations || []
+      invitations: res.data.invitations || [],
+      whitelist: res.data.whitelist || []
     })
   }
 
