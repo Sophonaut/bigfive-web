@@ -1,17 +1,13 @@
-import { useState, useEffect, useContext } from 'react'
+import { useContext } from 'react'
 import { Code, Layout } from '../components/alheimsins'
 import CompareMenu from '../components/CompareMenu'
 import { UserContext } from '../hooks/user'
-import { TokenContext } from '../hooks/token'
 import AlheimsinLayout from '../layouts/AlheimsinLayout'
 import { Router } from '../routes'
 import base64url from '../lib/base64url'
-import { safetyNet } from '../lib/safety-net'
 
 const Compare = () => {
   const [user] = useContext(UserContext)
-  const [token] = useContext(TokenContext)
-  const [loading, setLoading] = useState(true)
 
   console.log(`sanity check user.whitelist: ${JSON.stringify(user.whitelist)}`)
 
@@ -38,17 +34,7 @@ const Compare = () => {
     Router.pushRoute('showCompare', { id })
   }
 
-  useEffect(() => {
-    const safetyCheck = safetyNet(token)
-    if (!safetyCheck) {
-      console.log('safety check failed, redirecting to /signup')
-      window.location = '/signup'
-    } else {
-      setLoading(false)
-    }
-  }, [])
-
-  return loading ? <p>Loading...</p> : (
+  return (
     <Layout>
       <AlheimsinLayout>
         <div>

@@ -14,7 +14,7 @@ const router = require('express').Router()
 const tokenCheck = (req) => {
   let token = req.body && req.body.token ? req.body.token.split('.') : false
   if (!token) token = req.params && req.params.token ? req.params.token.split('.') : false
-  if (!token || !token[1]) throw new Error('Not a valid query')
+  if (!token) throw new Error('Not a valid query')
   return JSON.parse(Buffer.from(token[1], 'base64').toString('ascii')).id
 }
 

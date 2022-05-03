@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState, useRef } from 'react'
 import Resume from '../components/Resume'
 import { getItem } from '../lib/localStorageStore'
-import { safetyNet } from '../lib/safety-net'
 import { getResultFromUser, doCalculation } from '../lib/fetch-result'
 import { TokenContext } from '../hooks/token'
 import { UserContext } from '../hooks/user'
@@ -55,19 +54,12 @@ const ShowResult = () => {
   }
 
   useEffect(() => {
-    const safetyCheck = safetyNet(token)
-    if (!safetyCheck) {
-      console.log('safety check failed, redirecting to /signup')
-      window.location = '/signup'
-    } else {
-      console.log('safety check passed, fetching data')
-      checkToken()
-        .then(fetchData())
-        .then(() => {
-          isMounted = true
-          setLoading(false)
-        })
-    }
+    checkToken()
+      .then(fetchData())
+      .then(() => {
+        isMounted = true
+        setLoading(false)
+      })
 
     return () => {
       isMounted = false

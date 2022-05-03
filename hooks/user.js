@@ -4,7 +4,7 @@ import { getItem } from '../lib/localStorageStore'
 export const UserContext = createContext()
 
 export const UserProvider = ({ children }) => {
-  let userToken = getItem('currentUser') || false
+  let userToken = getItem('currentUser') || {}
   if (Object.keys(userToken).length > 0) userToken = JSON.parse(userToken).token
 
   // Right now, ID is the same as the token that's created after login
