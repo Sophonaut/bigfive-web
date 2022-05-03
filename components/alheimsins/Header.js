@@ -23,9 +23,15 @@ const Header = ({ info }) => {
               ? (
                 <div>
                   <a href='https://sophonaut.com'>HOME</a>
-                  <Link href='/test-prep' activeClassName='active'><a>TEST</a></Link>
-                  <Link href='/result' activeClassName='active'><a>RESULT</a></Link>
-                  <Link href='/compare' activeClassName='active'><a>COMPARE</a></Link>
+                  {token && Object.keys(token).length > 0
+                    ? (
+                      <>
+                        <Link href='/test-prep' activeClassName='active'><a>TEST</a></Link>
+                        <Link href='/result' activeClassName='active'><a>RESULT</a></Link>
+                        <Link href='/compare' activeClassName='active'><a>COMPARE</a></Link>
+                      </>
+                    )
+                    : (<></>)}
                 </div>
               )
               : (
@@ -36,7 +42,7 @@ const Header = ({ info }) => {
               )}
           </div>
           <div className='nav-right'>
-            {token
+            {token && Object.keys(token).length > 0
               ? (
                 <div>
                   <Link href='/profile' params={token} activeClassName='active'><a>PROFILE</a></Link>

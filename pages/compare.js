@@ -1,10 +1,12 @@
-import { useContext } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { Code, Layout } from '../components/alheimsins'
 import CompareMenu from '../components/CompareMenu'
 import { UserContext } from '../hooks/user'
+import { TokenContext } from '../hooks/token'
 import AlheimsinLayout from '../layouts/AlheimsinLayout'
 import { Router } from '../routes'
 import base64url from '../lib/base64url'
+import { safetyNet } from '../lib/safety-net'
 
 /*
   Compare has now been converted into a functional component with removed state.
@@ -52,6 +54,8 @@ import base64url from '../lib/base64url'
 
 const Compare = () => {
   const [user] = useContext(UserContext)
+  const [token] = useContext(TokenContext)
+  const [loading, setLoading] = useState(true)
 
   /**
    * handleClick needs to run the comparison for the user selected in the dropdown menu upstream
@@ -80,7 +84,17 @@ const Compare = () => {
     Router.pushRoute('showCompare', { id })
   }
 
-  return (
+  useEffect(() => {
+    const safetyCheck = safetyNet(token)
+    if (!safetyCheck) {
+      console.log('safety check failed, redirecting to /signup')
+      window.location = '/signup'
+    } else {
+      setLoading(false)
+    }
+  }, [])
+
+  return loading ? <p>Loading...</p> : (
     <Layout>
       <AlheimsinLayout>
         <div>
