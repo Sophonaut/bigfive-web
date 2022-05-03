@@ -19,19 +19,13 @@ const Header = ({ info }) => {
       <header>
         <div className='nav-container'>
           <div className='links-container'>
-            {token
+            {token && Object.keys(token).length > 0
               ? (
                 <div>
                   <a href='https://sophonaut.com'>HOME</a>
-                  {token && Object.keys(token).length > 0
-                    ? (
-                      <>
-                        <Link href='/test-prep' activeClassName='active'><a>TEST</a></Link>
-                        <Link href='/result' activeClassName='active'><a>RESULT</a></Link>
-                        <Link href='/compare' activeClassName='active'><a>COMPARE</a></Link>
-                      </>
-                    )
-                    : (<></>)}
+                  <Link href='/test-prep' activeClassName='active'><a>TEST</a></Link>
+                  <Link href='/result' activeClassName='active'><a>RESULT</a></Link>
+                  <Link href='/compare' activeClassName='active'><a>COMPARE</a></Link>
                 </div>
               )
               : (

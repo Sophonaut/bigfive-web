@@ -27,7 +27,9 @@ const COLORS = [
 ]
 
 const prepareData = data =>
-  data.map((item, i) => [item.title, item.score, COLORS[i]])
+  data.map((item, i) => {
+    return [item.title, item.score, COLORS[i]]
+  })
 
 const ColumnChart = ({ title, data, vAxis, chartWidth }) => (
   <Chart
@@ -88,22 +90,22 @@ export default class extends Component {
               border-radius: 10px;
             } 
 
+            
             @media (max-width: 500px) {
               .chart-container {
-                width: 50%;
-                min-width: 300px;
+                width: 90% !important;
+                min-width: 90% !important;
                 height: 100%;
                 padding: 0;
               }
             }
 
-            @media (max-width: 320px) {
+            @media (max-width: 400px)  {
               .chart-container {
-                width: 98vw;
-                min-width: 300px;
-                margin-right: 10px;
-                padding-right: 10px;
-
+                width: 90% !important;
+                min-width: 90% !important;
+                height: 100%;
+                padding: 0;
               }
             }
           `}

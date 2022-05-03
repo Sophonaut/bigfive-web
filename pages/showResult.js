@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, useRef } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import Resume from '../components/Resume'
 import { getItem } from '../lib/localStorageStore'
 import { safetyNet } from '../lib/safety-net'
@@ -21,7 +21,6 @@ const ShowResult = () => {
   */
   const [chartWidth, setChartWidth] = useState(800)
   const [loading, setLoading] = useState(true)
-  let isMounted = useRef(false)
 
   const checkToken = async () => {
     if (!token || token === null) {
@@ -36,7 +35,7 @@ const ShowResult = () => {
 
   const fetchData = async () => {
     const currentResultIsEmpty = user.currentResult && Object.keys(user.currentResult.length < 1)
-    if (isMounted && currentResultIsEmpty) {
+    if (currentResultIsEmpty) {
       console.log('retrieving results from db')
       const ret = await getResultFromUser(token)
       setResults(doCalculation(ret.result))
@@ -57,20 +56,15 @@ const ShowResult = () => {
   useEffect(() => {
     const safetyCheck = safetyNet(token)
     if (!safetyCheck) {
-      console.log('safety check failed, redirecting to /signup')
       window.location = '/signup'
     } else {
-      console.log('safety check passed, fetching data')
       checkToken()
-        .then(fetchData())
-        .then(() => {
-          isMounted = true
+        .then(
+          fetchData()
+        )
+        .then(
           setLoading(false)
-        })
-    }
-
-    return () => {
-      isMounted = false
+        )
     }
   }, [])
 
@@ -82,14 +76,13 @@ const ShowResult = () => {
     }
   }, [chartWidth])
 
-  if (loading) return <p>Loading...</p>
-
-  return (
-    <>
-      <h2>Result</h2>
-      <Resume data={results} chartWidth={chartWidth} />
-    </>
-  )
+  return loading ? <p>Loading...</p>
+    : (
+      <div>
+        <h2>Result</h2>
+        <Resume data={results} chartWidth={chartWidth} />
+      </div>
+    )
 }
 
 ShowResult.getLayout = function getLayout (page) {

@@ -82,8 +82,24 @@ const setColor = title => {
 const processData = props => {
   const title = props.title ? props.title : 'Personality Traits'
   const color = setColor(title)
-  const labels = props.data.map(facet => {
-    return facet.title
+  const facetDataCopy = props.data
+  const labels = facetDataCopy.map(facet => {
+    let facetTitleCopy = facet.title
+    console.log(`${JSON.stringify(facet)}`)
+    if (window.innerWidth < 400) {
+      facetTitleCopy = facet.facet || facet.title
+      console.log(facetTitleCopy)
+    } else if (window.innerWidth < 800) {
+      if (!facetTitleCopy.includes('Openness To Experience')) {
+        if (facetTitleCopy.includes('Openness ')) {
+          facetTitleCopy = facetTitleCopy.split(' ')[2]
+        }
+        if (facetTitleCopy.includes('ness')) {
+          facetTitleCopy = facetTitleCopy.split('').slice(0, -4).join('')
+        }
+      }
+    }
+    return facetTitleCopy
   })
   const dataset = props.data.map(facet => {
     return facet.score / (5 * facet.count)

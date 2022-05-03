@@ -5,11 +5,19 @@ import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/splide/dist/css/splide.min.css'
 
 const Facet = ({ data }) => (
-  <>
+  <div className='facet-description'>
     <ShortcutH2 name={data.title} />
     <p>Score: {data.score}/20 - {data.scoreText}</p>
     <p><span dangerouslySetInnerHTML={{ __html: data.text }} /></p>
-  </>
+    <style jsx>
+      {`
+      .facet-description p {
+        width: 90%;
+        margin: 0 auto;
+      }
+      `}
+    </style>
+  </div>
 )
 
 export default class extends Component {
@@ -94,6 +102,10 @@ export default class extends Component {
               .domain-description, .facet-list {
                 width: 100%;
                 margin: auto;
+              }
+              .domain-description p {
+                width: 90%;
+                margin: 0 auto;
               }
               `}
 

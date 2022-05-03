@@ -6,7 +6,7 @@ const Layout = ({ children, t }) => {
     <>
       <Head>
         <title>YOUniverse</title>
-        <meta name='viewport' content='initial-scale=0.8, maximum-scale=0.8, width=device-width' />
+        <meta name='viewport' content='width=device-width, initial-scale=1, minimum-scale=1' />
         <meta property='og:title' content='Find out who you are!' />
         <meta property='og:description' content='Take a comprehensive personality test with updated results, custom personal feedback and compare with others' />
         <meta property='og:image' content='/static/apple-icon-152x152.png' />

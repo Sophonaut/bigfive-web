@@ -10,7 +10,7 @@ import { safetyNet } from '../lib/safety-net'
 
 const Compare = () => {
   const [user] = useContext(UserContext)
-  const [token] = useContext(TokenContext)
+  const { token } = useContext(TokenContext)
   const [loading, setLoading] = useState(true)
 
   console.log(`sanity check user.whitelist: ${JSON.stringify(user.whitelist)}`)

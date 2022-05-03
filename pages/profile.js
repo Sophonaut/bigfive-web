@@ -58,10 +58,8 @@ const Profile = ({ props }) => {
   useEffect(() => {
     const safetyCheck = safetyNet(token)
     if (!safetyCheck) {
-      console.log('safety check failed, redirecting to /signup')
       window.location = '/signup'
     } else {
-      console.log('safety check passed, fetching data')
       checkToken()
         .then(fetchData())
         .then(() => {
