@@ -11,39 +11,66 @@ export const UserProvider = ({ children }) => {
   // We could use display name or something similar
   const [user, setUser] = useState({
     id: userToken,
-    results: [],
+    resultIds: [],
     invitations: [],
-    whitelist: []
+    whitelist: [],
+    currentResult: {}
   })
 
   // Local Storage: GET
   useEffect(() => {
-    console.log('update user data from local storage')
+    console.log('start GET from localstorage in UserContext')
     const idData = window.localStorage.getItem('id', user.id)
-    const resultsData = JSON.parse(window.localStorage.getItem('results', JSON.stringify(user.results)))
+    const resultIdData = JSON.parse(window.localStorage.getItem('resultIds', JSON.stringify(user.resultIds)))
     const invitationsData = JSON.parse(window.localStorage.getItem('invitations', JSON.stringify(user.invitations)))
     const whitelistData = JSON.parse(window.localStorage.getItem('whitelist', JSON.stringify(user.whitelist)))
+    const currentResultData = JSON.parse(window.localStorage.getItem('currentResult', JSON.stringify(user.currentResult)))
 
     const userData = {
       id: idData,
-      results: resultsData,
+      resultIds: resultIdData,
       invitations: invitationsData,
-      whitelist: whitelistData
+      whitelist: whitelistData,
+      currentResult: currentResultData
     }
 
-    if (idData && resultsData && resultsData.length > 0) {
+    if (idData && resultIdData && resultIdData.length > 0) {
+      console.log('updating user from local storage because condition was met')
       setUser(userData)
     }
-  }, [user.id, user.results.length])
+  }, [user.resultIds.length, setUser])
 
   // Local Storage: SET
   useEffect(() => {
-    console.log('update local storage with user data from fetch')
-    if (user.id) window.localStorage.setItem('id', user.id)
-    if (user.results && user.results.length > 0) window.localStorage.setItem('results', JSON.stringify(user.results))
-    if (user.invitatinos && user.invitations.length > 0) window.localStorage.setItem('invitations', JSON.stringify(user.invitations))
-    if (user.whitelist && user.whitelist.length > 0) window.localStorage.setItem('whitelist', JSON.stringify(user.whitelist))
-  }, [user.results.length])
+    console.log('start SET from localstorage in UserContext')
+
+    const idData = window.localStorage.getItem('id', user.id)
+    const resultIdData = JSON.parse(window.localStorage.getItem('results', JSON.stringify(user.resultIds))) || []
+    const invitationsData = JSON.parse(window.localStorage.getItem('invitations', JSON.stringify(user.invitations))) || []
+    const whitelistData = JSON.parse(window.localStorage.getItem('whitelist', JSON.stringify(user.whitelist))) || []
+    const currentResultData = JSON.parse(window.localStorage.getItem('currentResult', JSON.stringify(user.currentResult))) || []
+
+    if (user.id && user.id !== idData) {
+      window.localStorage.setItem('id', user.id)
+      console.log('did update localstorage id in UserContext SET')
+    }
+    if (user.resultIds && user.resultIds.length > 0 && user.resultIds !== resultIdData) {
+      window.localStorage.setItem('resultIds', JSON.stringify(user.resultIds))
+      console.log('did update localstorage resultIds in UserContext SET')
+    }
+    if (user.invitations && user.invitations.length > 0 && user.invitations !== invitationsData) {
+      window.localStorage.setItem('invitations', JSON.stringify(user.invitations))
+      console.log('did update localstorage invitations in UserContext SET')
+    }
+    if (user.whitelist && user.whitelist.length > 0 && user.whitelist !== whitelistData) {
+      window.localStorage.setItem('whitelist', JSON.stringify(user.whitelist))
+      console.log('did update localstorage whitelist in UserContext SET')
+    }
+    if (user.currentResult && Object.keys(user.currentResult).length > 0 && user.currentResult !== currentResultData) {
+      window.localStorage.setItem('currentResult', JSON.stringify(user.currentResult))
+      console.log('did update localstorage currentResult in UserContext SET')
+    }
+  }, [user.resultIds.length, user.whitelist.length, setUser])
 
   return (
     <UserContext.Provider value={[user, setUser]}>

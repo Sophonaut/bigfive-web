@@ -1,8 +1,8 @@
 import { useState, useContext } from 'react'
 import { Field, Button, InputText } from '../components/alheimsins'
 import { TokenContext } from '../hooks/token'
-import { catchLog } from '../lib/catchlog'
 import http from '../config/axiosConfig'
+import { toast } from 'react-toastify'
 
 const InviteShare = () => {
   const [email, setEmail] = useState('')
@@ -14,8 +14,10 @@ const InviteShare = () => {
       token: token
     }
     const result = await http.post('/api/invitations', params)
-      .catch(error => catchLog(error))
-    console.log(`validating result from post: ${JSON.stringify(result)}`)
+    const resultDataExists = result && result.data && result.data.message
+    resultDataExists && result.data.success
+      ? toast.success(result.data.message)
+      : toast.error(result.data.message)
   }
 
   return (

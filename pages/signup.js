@@ -51,10 +51,10 @@ const SignUp = () => {
       const res = await http.post('/api/users/login', userData)
       authenticationService.login(res.data.user)
       setToken(res.data.user.token)
-      toast.success(data.message)
+      toast.success(res.data.message)
       window.location = '/result'
     } catch (err) {
-      if (err.response.data) toast.error(err.response.data.message)
+      if (err.response && err.response.data) toast.error(err.response.data.message)
     }
   }
 

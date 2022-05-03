@@ -35,21 +35,22 @@ const ShowResult = () => {
   }
 
   const fetchData = async () => {
-    if (isMounted && user.results.length < 1) {
+    const currentResultIsEmpty = user.currentResult && Object.keys(user.currentResult.length < 1)
+    if (isMounted && currentResultIsEmpty) {
       console.log('retrieving results from db')
       const ret = await getResultFromUser(token)
-      setResults(ret.result)
+      setResults(doCalculation(ret.result))
       setUser({
         ...user,
         email: ret.user.email,
         invitations: ret.user.invitations || [],
-        results: ret.user.results,
-        whitelist: ret.user.whitelist
+        resultIds: ret.user.resultIds,
+        whitelist: ret.user.whitelist,
+        currentResult: ret.result
       })
-    } else if (user.results.length > 0) {
+    } else if (!currentResultIsEmpty) {
       console.log('hydrating results from user context')
-      const userResult = user.results.slice(-1).pop()
-      setResults(doCalculation(userResult))
+      setResults(doCalculation(user.currentResult))
     }
   }
 
