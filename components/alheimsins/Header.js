@@ -19,7 +19,7 @@ const Header = ({ info }) => {
       <header>
         <div className='nav-container'>
           <div className='links-container'>
-            {token
+            {token && Object.keys(token).length > 0
               ? (
                 <div>
                   <a href='https://sophonaut.com'>HOME</a>
@@ -36,7 +36,7 @@ const Header = ({ info }) => {
               )}
           </div>
           <div className='nav-right'>
-            {token
+            {token && Object.keys(token).length > 0
               ? (
                 <div>
                   <Link href='/profile' params={token} activeClassName='active'><a>PROFILE</a></Link>

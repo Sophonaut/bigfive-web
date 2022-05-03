@@ -37,7 +37,6 @@ const SummaryCompare = ({ title, data, header, vAxis, chartWidth }) => {
   }
 
   const labels = data.map(array => array[0])
-  console.log(`labels: ${labels}`)
 
   /*
     label: String
@@ -64,9 +63,6 @@ const SummaryCompare = ({ title, data, header, vAxis, chartWidth }) => {
       borderWidth: 1
     }
   ]
-
-  datasets.forEach(dataset => { console.log(JSON.stringify(dataset)) })
-  console.log(JSON.stringify(datasets))
 
   return (
     <>

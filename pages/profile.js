@@ -7,6 +7,7 @@ import { getItem } from '../lib/localStorageStore'
 import { getResultFromUser, doCalculation } from '../lib/fetch-result'
 import { TokenContext } from '../hooks/token'
 import { UserContext } from '../hooks/user'
+import { safetyNet } from '../lib/safety-net'
 
 import { Layout } from '../components/alheimsins'
 import AlheimsinLayout from '../layouts/AlheimsinLayout'
@@ -55,12 +56,17 @@ const Profile = ({ props }) => {
   }
 
   useEffect(() => {
-    checkToken()
-      .then(fetchData())
-      .then(() => {
-        isMounted = true
-        setLoading(false)
-      })
+    const safetyCheck = safetyNet(token)
+    if (!safetyCheck) {
+      window.location = '/signup'
+    } else {
+      checkToken()
+        .then(fetchData())
+        .then(() => {
+          isMounted = true
+          setLoading(false)
+        })
+    }
 
     return () => {
       isMounted = false

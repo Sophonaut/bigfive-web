@@ -1,6 +1,7 @@
-import { useContext, useEffect, useState, useRef } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import Resume from '../components/Resume'
 import { getItem } from '../lib/localStorageStore'
+import { safetyNet } from '../lib/safety-net'
 import { getResultFromUser, doCalculation } from '../lib/fetch-result'
 import { TokenContext } from '../hooks/token'
 import { UserContext } from '../hooks/user'
@@ -20,7 +21,6 @@ const ShowResult = () => {
   */
   const [chartWidth, setChartWidth] = useState(800)
   const [loading, setLoading] = useState(true)
-  let isMounted = useRef(false)
 
   const checkToken = async () => {
     if (!token || token === null) {
@@ -35,7 +35,7 @@ const ShowResult = () => {
 
   const fetchData = async () => {
     const currentResultIsEmpty = user.currentResult && Object.keys(user.currentResult.length < 1)
-    if (isMounted && currentResultIsEmpty) {
+    if (currentResultIsEmpty) {
       console.log('retrieving results from db')
       const ret = await getResultFromUser(token)
       setResults(doCalculation(ret.result))
@@ -54,15 +54,17 @@ const ShowResult = () => {
   }
 
   useEffect(() => {
-    checkToken()
-      .then(fetchData())
-      .then(() => {
-        isMounted = true
-        setLoading(false)
-      })
-
-    return () => {
-      isMounted = false
+    const safetyCheck = safetyNet(token)
+    if (!safetyCheck) {
+      window.location = '/signup'
+    } else {
+      checkToken()
+        .then(
+          fetchData()
+        )
+        .then(
+          setLoading(false)
+        )
     }
   }, [])
 
@@ -74,14 +76,13 @@ const ShowResult = () => {
     }
   }, [chartWidth])
 
-  if (loading) return <p>Loading...</p>
-
-  return (
-    <>
-      <h2>Result</h2>
-      <Resume data={results} chartWidth={chartWidth} />
-    </>
-  )
+  return loading ? <p>Loading...</p>
+    : (
+      <div>
+        <h2>Result</h2>
+        <Resume data={results} chartWidth={chartWidth} />
+      </div>
+    )
 }
 
 ShowResult.getLayout = function getLayout (page) {
